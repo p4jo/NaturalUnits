@@ -1,0 +1,82 @@
+\documentclass[
+	12pt,
+	DIV=13,
+	twoside=true,
+	BCOR=10mm,
+	toc=bibliography,
+	cleardoublepage=empty,
+	open=right
+	]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[
+	greek,
+	ngerman
+	]{babel}
+\usepackage{microtype}
+\usepackage{csquotes}
+\usepackage[lf]{MinionPro}
+\usepackage[
+	scale=1,
+	lf,
+	sansmath]{MyriadPro}
+%\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{color}
+%\usepackage{setspace}
+%\usepackage{siunitx}
+%\usepackage{physics}
+\usepackage{longtable}
+\usepackage{bm}
+\usepackage{xcolor}
+
+\usepackage{pgffor}
+%\usepackage{cancel}
+
+\usepackage[automark]{scrlayer-scrpage}
+%\usepackage[
+%	backend=biber,
+%	style=phys,
+%	biblabel=brackets]{biblatex}
+\usepackage{xspace}
+%\usepackage{upgreek} % bitte einbauen, falls MinionPro nicht verwendet
+
+\hypersetup
+{
+	colorlinks	= true,
+	linkcolor   = dblue, 
+	citecolor   = dblue,
+	bookmarksnumbered = true,
+	urlcolor    = dblue,
+	pdfauthor   = {Johannes Heißler},
+	pdftitle    = {Natural Units in different base systems},
+	pdfsubject  = {System of natural units},
+	pdfkeywords = {Fundamental, Units, Base 6}
+}
+
+%\hyphenation{Hoch-tem-pera-tur-su-pra-lei-tern Ku-pfer-atomen}
+
+%\input{commands.tex}
+%\input{colors.tex}
+%\input{format.tex}
+%\input{bibliography.tex}
+
+\begin{document}
+\pagestyle{scrheadings}
+\pagenumbering{roman}
+%\tableofcontents
+%\cleardoublepage
+\pagenumbering{arabic}
+
+%\newcommand*{\MaxNumOfChapters}{40}% 
+%\newcommand*{\MaxNumOfSections}{40}%
+
+%\foreach \c in {1,2,...,\MaxNumOfChapters}{%
+%    \foreach \s in {1,2,...,\MaxNumOfSections}%
+%        {\IfFileExists{../Kapitel\c/Abschnitt\s.tex}{ \input{../Kapitel\c/Abschnitt\s.tex}}}}%
+
+\input{NaturalUnits.tex}
+\cleardoublepage 
+\raggedright 
+%\printbibliography
+\end{document}
