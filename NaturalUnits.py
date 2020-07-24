@@ -10,9 +10,9 @@ eps0_is_1 = True #1/4π otherwise
 G_is_1 = False 
 G8π_is_1 = False #1/4π otherwise
 digits = 6
-bases = [6,10,12]
+bases = [6]#[6,10,12]
 
-prefixes = [["m",1E-3], ["",1], ["k",1E3]] #[["",1]] 
+prefixes = [["",1]] #[["m",1E-3], ["",1], ["k",1E3]] #[["",1]] 
 
 #endregion
 
@@ -162,24 +162,29 @@ def addLine(name,valueSI,dimension,base,color = '', comment = ''):
     valstr = inBase(base,1/inPlanckUnits(valueSI,dimension))
     [mantissa,exp] = str.split(valstr,'\\cdot')
     exp = exp.replace('{','ß').replace('ß-','{').replace('ß','{-')
-    pot = exp.replace('10^{','').replace('}','') + '-'
-    document += "{\\color{" + color+ "}$ "+ nameOfExponent(pot,base) + "–" + writeDimension(dimension) + "=" + exp + " = " + mantissa +" \\cdot " + name +'$}'
+    pot = exp.replace('10^{','').replace('}','')
+    document += "{\\color{" + color+ "}$1\\:\\text{"+ nameOfExponent(pot,base) + "} " + writeDimension(dimension) + "=" + exp + " = " + mantissa +" \\cdot " + name +'$}'
     
     stuff(valstr)
 
     document += '\\\\\n'
 
 def nameOfExponent(pot, base):
-    return pot/base
+    if int (pot) == 0:
+        return ''
+    return "\\textbf{" + pot[:-1] + '}-'
 
-def writeDimension(exponents,names = ["M","L","T","Q","Θ"]):
+def writeDimension(exponents,names = ["M","L","T","Q","\\Theta"],operatorname = False):
     num = ''
     den = ''
     for i in range(len(exponents)):
         if exponents[i] == 0:
             continue
         exp = abs(exponents[i])
-        s = "\\operatorname{" + names[i] + "}" 
+        if operatorname:
+            s = "\\operatorname{" + names[i] + "}" 
+        else:
+            s = names[i]
         if exp > 1:
             s += f"^{exp}"
         if exponents[i] < 0:
@@ -209,7 +214,7 @@ for base in bases:
                     for t in [0,-1,-2,1]:
                         #if m + lp + tp + 3*n.min([qp,θp]) <= 7: #Only reasonable units
                         for prefix in prefixes: 
-                            addLine("1 \\bm{\\mathrm{ " + prefix[0] +"}}"+ writeDimension([m,l,t,q,θ],['kg','m','s','C','K']),prefix[1],[m,l,t,q,θ],base,("gray" if prefix[0] != '' else ""))
+                            addLine("1 \\bm{\\mathrm{ " + prefix[0] +"}}"+ writeDimension([m,l,t,q,θ],['kg','m','s','C','K'],True),prefix[1],[m,l,t,q,θ],base,("gray" if prefix[0] != '' else ""))
                 
     #endregion
     document += '\n\\caption*{Other interesting variables for comparison:}\\\\\n'
