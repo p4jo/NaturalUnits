@@ -95,7 +95,7 @@ def inBase(value:float):
         mantissa = mantissa[0:-i+1] + '.' + mantissa[-i+1:]
     return [mantissa + exp ,value,Pot,mantissa,exp]
 
-Conv = nl.inv(n.array([[1,2,-1,0,0], [1,1,0,-2,0], [0,1,-1,0,0], [1,2,-2,0,2], [-1,3,-2,0,0]]))
+Conv = nl.inv(n.array([[1,2,-1,0,0], [1,1,0,-2,0], [0,1,-1,0,0], [1,2,-2,0,-1], [-1,3,-2,0,0]]))
 
 def SetupSystem():
     global p, eps0_is_1, G_is_1, G4τ_is_1
@@ -108,7 +108,7 @@ def SetupSystem():
     elif (G_is_1):
         f1 = 1.0
 
-    p = [6.62607015E-34/2/n.pi, 1.25663706212E-6 * f0, 299792458.0, 1380649E-23, 6.67430E-11 *f1] 
+    p = [6.62607015E-34/2/n.pi, 1.25663706212E-6 / f0, 299792458.0, 1.380649E-23, 6.67430E-11 *f1] 
 
 def inPlanckUnits(valSI,dim):
     global p, Conv
@@ -211,7 +211,8 @@ def baseReplace(text):
 #endregion
 #region Document
 def CreateDocument():
-    
+    global document,base,eps0_is_1,G_is_1,G4τ_is_1
+
     #region Comparison values
     comp = [
     ["Proton mass",1.67262192369E-27,M,True,'','m_p'],
@@ -364,28 +365,60 @@ def SetExpRule():
     global PotRoundingFunction
     PotRoundingFunction=eval(input("Set Rule (AllExponents or OnlyExponentsThatEndWithZero): "))
 
+def inExpr(i,string):
+    expressions = string.split(' ')
+    for expr in expressions:
+        if i < len(expr):
+            string = expr
+            break
+        i -= len(expr)
+
+    if ':' in string:
+        if string.find(':') < i:
+            return True
+    if ';' in string:
+        if string.find(';') < i:
+            return True
+    return False
+
+
 def Evaluate(inputString:str):
     inputString = inputString.strip()
     if inputString == '#':
         return Ans
-    inputString = inputString.replace('-','+-').replace('/','*/').replace('++','+').replace('**','*')
+    
+    for i in range(len(inputString)):
+        c = inputString[i]
+        if inExpr(i,inputString) or (c == '-' and i>0 and inputString[i-1] == 'E'):
+            pass
+        else:
+            if c == '-':
+                inputString = inputString[:i] + '†~' + inputString[i+1:]
+            if c == '+':
+                inputString = inputString[:i] + '†' + inputString[i+1:]
+            if c == '/' or c == '\\':
+                inputString = inputString[:i] + '·÷' + inputString[i+1:]
+            if c == '*':
+                inputString = inputString[:i] + '·' + inputString[i+1:]
 
-    summands = inputString.split('+')
+    inputString = inputString.replace('††','†').replace('··','·')
+
+    summands = inputString.split('†')
     #print(summands)
     if len(summands) > 1:
         result = 0
         for summand in summands:
-            if summand.startswith('-'):
+            if summand.startswith('~'):
                 result -= Evaluate(summand[1:])
             else:
                 result += Evaluate(summand)
         return result
 
-    factors = inputString.split('*')
+    factors = inputString.split('·')
     if len(factors) > 1:
         result = 1
         for factor in factors:
-            if factor.startswith('/'):
+            if factor.startswith('÷'):
                 result /= Evaluate(factor[1:])
             else:
                 result *= Evaluate(factor)
@@ -395,7 +428,7 @@ def Evaluate(inputString:str):
         f = 1
     if ':' in inputString:
         f = -1
-        inputString.replace(':',";")
+        inputString = inputString.replace(':',";")
     inputValue = 0.0
     Dim=[0,0,0,0,0]
     for comm in inputString.split(';'):
@@ -421,7 +454,7 @@ def Evaluate(inputString:str):
                 continue
     return inPlanckUnits(inputValue,Dim)
     
-commands = {"exit": exit,  
+commands = {"exit": lambda:exit(),  
             "SetExpRule": SetExpRule}
 PrintSettings()
 SetupSystem()
@@ -440,7 +473,7 @@ while True:
     else:
         try:
             print(eval(inputString))
-        except SyntaxError as e:
+        except Exception as e:
             try:
                 exec(inputString)
             except Exception as e:
