@@ -1,3 +1,4 @@
+T
 #region Setup
 
 import numpy as n
@@ -18,7 +19,7 @@ document = ''
 #region Parameter
 
 def OnlyExponentsThatEndWithZero(pot): 
-    return round(pot/base)*base
+    return int(round(pot/base)*base)
 def AllExponents(pot):
     return pot
 
@@ -75,15 +76,19 @@ def inBase(value:float):
     if (value == 0):
         return ['0',0,0,'0','']
     
+    sign = '-' if value < 0 else ''
+
+    value = n.abs(value)
+
     baseToTheDigitsMinus1 = base ** (digits-1)
-    approxPot = int(n.log2(n.abs(value)) / n.log2(base))
+    approxPot = int(n.log2(value) / n.log2(base))
     pot = digits-1 + approxPot+1
     value *= base**(-approxPot-1)
-    while n.round(n.abs(value)) < baseToTheDigitsMinus1:
+    while n.round(value) < baseToTheDigitsMinus1:
         value *= base
         pot -= 1
     Pot = PotRoundingFunction(pot)
-    mantissa = n.base_repr(int(round((value))),base)
+    mantissa = n.base_repr(int(round(value)),base)
     exp = "\\cdot10^{" + str(n.base_repr(Pot,base)) +'}' if pot != 0 else ''
     i = Pot-pot
     if i > 0:
@@ -93,7 +98,8 @@ def inBase(value:float):
         mantissa = res + mantissa
     else:
         mantissa = mantissa[0:-i+1] + '.' + mantissa[-i+1:]
-    return [mantissa + exp ,value,Pot,mantissa,exp]
+    mantissa = sign + mantissa
+    return [mantissa + exp, (value if sign == '' else -value), Pot, mantissa, exp]
 
 Conv = nl.inv(n.array([[1,2,-1,0,0], [1,1,0,-2,0], [0,1,-1,0,0], [1,2,-2,0,-1], [-1,3,-2,0,0]]))
 
@@ -366,19 +372,26 @@ def SetExpRule():
     PotRoundingFunction=eval(input("Set Rule (AllExponents or OnlyExponentsThatEndWithZero): "))
 
 def inExpr(i,string):
-    expressions = string.split(' ')
-    for expr in expressions:
-        if i < len(expr):
-            string = expr
-            break
-        i -= len(expr)
+    # expressions = string.split(' ')
+    # for expr in expressions:
+    #     if i < len(expr):
+    #         string = expr
+    #         break
+    #     i -= len(expr)
 
-    if ':' in string:
-        if string.find(':') < i:
+    # if ':' in string:
+    #     if string.find(':') < i:
+    #         return True
+    # if ';' in string:
+    #     if string.find(';') < i:
+    #         return True
+    j = i
+    while j >= 0:
+        j -= 1
+        if string[j] == ';' or string[j] == ':':
             return True
-    if ';' in string:
-        if string.find(';') < i:
-            return True
+        if string[j] == ' ':
+            return False
     return False
 
 
@@ -393,15 +406,15 @@ def Evaluate(inputString:str):
             pass
         else:
             if c == '-':
-                inputString = inputString[:i] + '†~' + inputString[i+1:]
+                inputString = inputString[:i] + '_' + inputString[i+1:]
             if c == '+':
                 inputString = inputString[:i] + '†' + inputString[i+1:]
             if c == '/' or c == '\\':
-                inputString = inputString[:i] + '·÷' + inputString[i+1:]
+                inputString = inputString[:i] + '\\' + inputString[i+1:]
             if c == '*':
                 inputString = inputString[:i] + '·' + inputString[i+1:]
 
-    inputString = inputString.replace('††','†').replace('··','·')
+    inputString = inputString.replace('_','†~').replace('\\','·÷').replace('††','†').replace('··','·')
 
     summands = inputString.split('†')
     #print(summands)
@@ -462,9 +475,14 @@ inputBase = base
 Ans = 0
 while True:
     inputString = input()
+    if inputString == '':
+        continue
     if inputString in commands:
         commands[inputString]()
-    elif re.match("\\d",inputString[0]):
+        continue
+    if re.match("[0-9=\\-+]",inputString[0]):
+        if inputString[0] == '=':
+            inputString = inputString[1:]
         Ans = Evaluate(inputString)
         [_,_,pot,valStr,_] = inBase(Ans)
         #[m,l,t,q,θ] = Dim
