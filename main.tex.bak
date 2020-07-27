@@ -14,21 +14,25 @@
 	ngerman
 	]{babel}
 \usepackage{microtype}
+\usepackage{textgreek}
 \usepackage{csquotes}
 \usepackage[lf]{MinionPro}
-\usepackage[
-	scale=1,
-	lf,
-	sansmath]{MyriadPro}
+%\usepackage[
+%	scale=1,
+%	lf,
+%	sansmath]{MyriadPro}
 %\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{color}
 %\usepackage{setspace}
-%\usepackage{siunitx}
+\usepackage{siunitx}
 %\usepackage{physics}
 \usepackage{longtable}
+\usepackage{arydshln}
 \usepackage{bm}
-\usepackage{pgffor}
+\usepackage{xcolor}
+
+%\usepackage{pgffor}
 %\usepackage{cancel}
 
 \usepackage[automark]{scrlayer-scrpage}
@@ -42,10 +46,10 @@
 \hypersetup
 {
 	colorlinks	= true,
-	linkcolor   = dblue, 
-	citecolor   = dblue,
+	linkcolor   = blue, 
+	citecolor   = blue,
 	bookmarksnumbered = true,
-	urlcolor    = dblue,
+	urlcolor    = blue,
 	pdfauthor   = {Johannes Heißler},
 	pdftitle    = {Natural Units in different base systems},
 	pdfsubject  = {System of natural units},
@@ -61,7 +65,7 @@
 
 \begin{document}
 \pagestyle{scrheadings}
-\pagenumbering{roman}
+%\pagenumbering{roman}
 %\tableofcontents
 %\cleardoublepage
 \pagenumbering{arabic}
@@ -74,7 +78,7 @@
 %        {\IfFileExists{../Kapitel\c/Abschnitt\s.tex}{ \input{../Kapitel\c/Abschnitt\s.tex}}}}%
 
 \input{NaturalUnits.tex}
-\cleardoublepage 
-\raggedright 
+%\cleardoublepage 
+%\raggedright 
 %\printbibliography
 \end{document}

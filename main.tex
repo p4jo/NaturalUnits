@@ -1,39 +1,62 @@
-\documentclass[
-	12pt,
-	DIV=13,
-	twoside=true,
-	BCOR=10mm,
-	toc=bibliography,
-	cleardoublepage=empty,
-	open=right
-	]{scrreprt}
+% \documentclass[
+% 	11pt,
+% 	%twoside=true,
+% 	%BCOR=10mm,
+% 	%toc=bibliography,
+% 	%cleardoublepage=empty,
+% 	%open=right,
+% 	headheight=29pt,
+% 	footinclude=on,12pt
+% 	]{scrreprt}
+
+\documentclass[%
+  paper=a4,
+  twoside = false,
+  headinclude=on,
+  footinclude=off
+]{scrreport}
+%\usepackage{typearea}
+%\usepackage{scrpage2}
+\usepackage[automark]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\addtokomafont{pagenumber}{\oldstylenums}
+\clearscrheadfoot %% <-----
+\rehead[\pagemark]{\pagemark}
+\lehead{\headmark}
+\lohead[\pagemark]{\pagemark}
+\rohead{\headmark}% right odd head <===================================
+
+%\areaset[0cm]{191mm}{250mm}
+\usepackage[bottom = 1cm, left = 1cm,top=2cm,right = 1 cm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[
-	greek,
-	ngerman
-	]{babel}
-\usepackage{microtype}
-\usepackage{csquotes}
-\usepackage[lf]{MinionPro}
 %\usepackage[
-%	scale=1,
-%	lf,
-%	sansmath]{MyriadPro}
+%	greek,
+%	ngerman
+%	]{babel}
+\usepackage{microtype}
+\usepackage{textgreek}
+\usepackage{csquotes}
+%\usepackage[lf]{MinionPro}
+\usepackage[
+	scale=1,
+	lf,
+	sansmath]{MyriadPro}
 %\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{color}
 %\usepackage{setspace}
-%\usepackage{siunitx}
+\usepackage{siunitx}
 %\usepackage{physics}
 \usepackage{longtable}
-\usepackage{bm}
-\usepackage{xcolor}
 
-\usepackage{pgffor}
+\usepackage{colortbl}
+\usepackage{bm}
+%\usepackage{xcolor}
+
+%\usepackage{pgffor}
 %\usepackage{cancel}
 
-\usepackage[automark]{scrlayer-scrpage}
 %\usepackage[
 %	backend=biber,
 %	style=phys,
@@ -62,10 +85,10 @@
 %\input{bibliography.tex}
 
 \begin{document}
-\pagestyle{scrheadings}
+\pagestyle{headings}
 \pagenumbering{roman}
-%\tableofcontents
-%\cleardoublepage
+\tableofcontents
+\cleardoublepage
 \pagenumbering{arabic}
 
 %\newcommand*{\MaxNumOfChapters}{40}% 
@@ -74,9 +97,9 @@
 %\foreach \c in {1,2,...,\MaxNumOfChapters}{%
 %    \foreach \s in {1,2,...,\MaxNumOfSections}%
 %        {\IfFileExists{../Kapitel\c/Abschnitt\s.tex}{ \input{../Kapitel\c/Abschnitt\s.tex}}}}%
-
+\renewcommand{\arraystretch}{1.1}
 \input{NaturalUnits.tex}
-\cleardoublepage 
-\raggedright 
+%\cleardoublepage 
+%\raggedright 
 %\printbibliography
 \end{document}
