@@ -1,4 +1,4 @@
-#coding=utf8
+ #coding=utf8
 #region Setup
 
 import numpy as n
@@ -483,6 +483,7 @@ while True:
     if re.match("[0-9=\\-+]",inputString[0]):
         if inputString[0] == '=':
             inputString = inputString[1:]
+        inputString = inputString.replace('kg',' 1;M ').replace('s',' 1;T ').replace('m',' 1;L '  ).replace('C',' 1;Q ').replace('K',' 1;Θ ').replace('J',' 1;E ')
         Ans = Evaluate(inputString)
         [_,_,pot,valStr,_] = inBase(Ans)
         #[m,l,t,q,θ] = Dim
