@@ -1,4 +1,3 @@
-T
 #region Setup
 
 import numpy as n
@@ -225,14 +224,15 @@ def CreateDocument():
     ["Electron mass",9.10938356E-31,M,True,'','m_e'],
     ["Elementary charge",1.60217662E-19,Q,True,'','e'],
     ["\\si\\angstrom",1E-10,L,False,"Length in atomic and solid state physics, 1/ß10ß nm",'|'],
-    ["Bohr radius",5.29177210603E-11,L,True,'Characteristic Length in the hydrogen atom','r_B'],
-    ["Fine structure constant",7.2973525693E-3,[0,0,0,0,0],True,'','\\alpha'],
-    ["Rydberg Energy",13.605693122994*1.60217662E-19,E,True,'','Ry'],
+    ["Bohr radius",5.29177210603E-11,L,True,'Characteristic Length in the hydrogen atom. $a_0 = \\frac1{m_\\mathrm{e}\\alpha}$','a_0'],
+    ["Fine structure constant",7.2973525693E-3,[0,0,0,0,0],True,'Fundamental constant describing strength of electromagnetism. $\\alpha=k_\\mathrm{Coulomb}e^2$','\\alpha'],
+    ["Rydberg Energy",13.605693122994*1.60217662E-19,E,True,'Ry $=\\frac{m_\\mathrm{e}\\alpha^2}2$. Lowest energy state in hydrogen is -Ry','Ry'],
+    ["|\\psi^_{100}(0)|^2",2.14806158490639E30,-3*L,False,'Maximum probability density of electron in hydrogen. $frac1{\\pi a_0^3}$',"\\rho_\\operatorname{max}"],
     ["\\si\\eV",1.60217662E-19,E,False,'','|'],
     ["\\hbar",6.62607015E-34/2/n.pi,E+T,False,"Quantum of angular momentum, Ratio between frequency (space/time) and momentum (momentum/Energy)"],
     ["\\lambda_\\mathrm{yellow}",575E-9,L],
-    ["k_\\mathrm{yellow}",2*n.pi/575E-9,-L,False,"τ/λ = k = ω = p = E (In natural units - i.e. in these units)"],
-    ["k_\\mathrm{X-Ray}",5.96075295947766E17,-L,False,'Geometric mean of upper and lower end of X-Ray definitions'],
+    ["k_\\mathrm{yellow}",2*n.pi/575E-9,-L,False,"$\\frac\\tau\\lambda = k = \\omega = p = E$ (In natural units - i.e. in these units)"],
+    ["k_\\mathrm{X-Ray}",5.96075295947766E17,-L,False,'Geometric mean of upper and lower end of the X-Ray interval'],
     [],
     ["Earth g", 9.80665 ,M+L-T*2,True],
     ["\\si\\cm",0.01,L,False,'','|'],
@@ -243,24 +243,31 @@ def CreateDocument():
     ["ß100ß \\operatorname m^2",100,L*2,False,"Size of a home"],
     ["km/h",1/3.6,L-T,True,'','|'],
     ["mi/h",0.44704,L-T,True,'','|'],
-    ["inch",0.0254,L,True,"ß36ß in = 1 yd = 3 ft",'|'],
-    ['mile',1609.3,L,True,'','|'],
+    ["inch",0.0254,L,True,"ß36ß in = 1 yd = 3 ft",'\\operatorname{in}'],
+    ['mile',1609.3,L,True,'','\\operatorname{mi}'],
     ['pound',0.45359237,M,True,'','|'],
     ["horsepower",745.7,E-T,True,'','|'],
     ["kcal",4186.8,E,True,'','|'],
-
+    ["kWh",3600000,E,True,'','|'],
+    ["Typical household electric field",7.68078,E-L-Q,True,'','E_\\mathrm H'],
+    ["Earth magnetic field",48E-6,M-T-Q],
+    ["Height of an average man",1.77,L,True,'in developed countries','\\overline h'],
+    ["Mass of an average man",70,M,True,'','\\overline m'],
     [],
     ["Age of the Universe",662695992000000.0,T,True,'','t_U'],
     ["Size of the observable Universe",8.8E26,L,True,'','l_U'],
     ["Average density of the Universe",9.9E-33,M-L*3,True,'','\\rho_U'],
     ["Earth mass",5.972E24,M,True,'','m_E'],
-    ["Sun mass",1.98892E30,M,True,'','m_S'],
+    ["Sun mass",1.98892E30,M,True,'The Schwarzschild radius of a mass $M$ is $2GM$','m_S'],
     ["Year",24*60*60*365.2425,T,True,'','\\operatorname y'],
-    ["c",299792458,L-T],
+    ["Speed of Light",299792458,L-T,True,'','c'],
     ["Parsec",3.0857E16,L,True,'','\\operatorname{pc}'],
-    ["Astronomical unit",149597870700.0,L,True,'','\\operatorname{AE}'],
+    ["Astronomical unit",149597870700.0,L,True,'','\\operatorname{au}'],
+    ["Earth radius",6371000,L,True,'','r_E'],
+    ["Distance Earth-Moon",384400000,L,True,'',"d_M"],
+    ["Momentum of someone walking",1305,M+L-T,'','p'],
     [],
-    ["Stefan-Boltzmann constant",567052E-8,E-T-L*2-Θ*4,True,'','\\sigma'],
+    ["Stefan-Boltzmann constant",5.670374419E-8,E-T-L*2-Θ*4,True,'','\\frac{\\pi^2}{ß60ß}=\\sigma'],
     ["\\si{\\mol}",6.02214086E23,[0,0,0,0,0],False,'','|'],
     ["Standard temperature",273.15,Θ,True,"0°C measured from absolute zero","T_0"],
     ["Room - standard temperature",20,Θ,True,"ß20ß °C",'\\Theta_R'],
@@ -354,6 +361,8 @@ def CreateDocument():
                                 for t in [0,-1,-2,1]:
                                     #if m + lp + tp + 3*n.min([qp,θp]) <= 7: #Only reasonable units
                                     for prefix in prefixes: 
+                                        if base==10 and prefix[1] != 1:
+                                            continue
                                         name = "\\bm{\\mathrm{ " + prefix[0] +"}}"+ writeDimension([m,l,t,q,θ],['kg','m','s','C','K'],True)
                                         addLine("1 "+name,prefix[1],[m,l,t,q,θ],("gray" if prefix[0] != '' else ""),name2=name)
                             
