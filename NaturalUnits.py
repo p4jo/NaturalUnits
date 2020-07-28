@@ -73,8 +73,9 @@ nameOfExponent = DividedByBaseInLojbanNumbering
 def PrintSettings():
     print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__, ', input base: ', inputBase,sep='')
     print ("eps0 = ", '1' if eps0_is_1 else "1/2τ", ', G = ', '1' if G_is_1 else ('1/4τ' if G4τ_is_1 else '1/2τ'), sep='')
-    print ("PrintSettings() or help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
+    print ("Type help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
     print("CreateSmallDocument() for LaTeX overview with current settings. Use the main.tex file and modify. GetTexFiles() to do that.")
+    print('GetPDF() to get the full many-option compiled document.')
     
 #endregion
 
@@ -608,9 +609,11 @@ def GetTexFiles():
         return
     print("Here is the link to the NaturalUnits.tex file (Created by CreateDocument): ")
     print(link)
-    print("And here is the link for a working main.tex")
-    print()
+    print("And here is the link for a working main.tex you can compile with ")
+    print("https://drive.google.com/file/d/16QJnW8IxFz8L5wj7aBWjT4TJNiIiIiT-/view?usp=sharing")
 
-
+def GetPDF():
+    print("Here is the big PDF File you can download:")
+    print('https://drive.google.com/file/d/1V1Ly5PT4ujwJQhp9PtsHHDrpRnzAiYEn/view?usp=sharing')
 #endregion
 MAIN()
