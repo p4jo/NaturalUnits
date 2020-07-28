@@ -1,7 +1,4 @@
 client_config_backend: file
-client_config:
-    client_id: <your_client_id>
-    client_secret: <your_secret>
 
 save_credentials: True
 save_credentials_backend: file
