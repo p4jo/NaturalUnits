@@ -12,8 +12,15 @@ Enter python code à la:
 * inputBase=10
 * base=7 (output base)
 * Change the System of natural units: eps0_is_1 = False or: G_is_1 = False and afterwards: SetupSystem()
-* Make (partial) LaTeX document: CreateDocument(). Please change the parameters at the top of the python script (e.g. in the command line), or else it will take a long time and create the same document I provided
+* Make (partial) LaTeX document: CreateSmallDocument(). 
+Or CreateDocument(complicated parameters - look at the code) or change the parameters at the top of the python script (e.g. in the command line) and run CreateBigDocument() 
 
 Enter commands like:
 * SetExpRule
 * exit
+
+There is a hosted version:
+https://NaturalUnits.thebytebreaker.repl.run
+
+Created documents can be downloaded from the links provided there.
+Use GetPDF(), GetTexFiles() 
