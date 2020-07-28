@@ -16,7 +16,8 @@ Enter python code à la:
 Or CreateDocument(complicated parameters - look at the code) or change the parameters at the top of the python script (e.g. in the command line) and run CreateBigDocument() 
 
 Enter commands like:
-* SetExpRule
+* SetExpRule / setExp rule ...
+* set name of exponents
 * exit
 
 There is a hosted version:
