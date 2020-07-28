@@ -1,4 +1,4 @@
- #coding=utf8
+#coding=utf8
 #region Setup
 
 import numpy as n
@@ -20,8 +20,15 @@ document = ''
 
 def OnlyExponentsThatEndWithZero(pot): 
     return int(round(pot/base)*base)
+
 def AllExponents(pot):
     return pot
+
+def Italic(pot: int):
+    if pot == 0:
+        return ''
+    return "\\textit{" +n.base_repr(pot,base)+"}-"
+    
 
 def DividedByBase(pot:int):
     if pot == 0:
@@ -64,7 +71,11 @@ PotRoundingFunction = OnlyExponentsThatEndWithZero
 nameOfExponent = DividedByBaseInLojbanNumbering
 
 def PrintSettings():
-    print ("Base ",base,", ",nameOfExponent) #todo
+    print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__, ', input base: ', inputBase,sep='')
+    print ("eps0 = ", '1' if eps0_is_1 else "1/2τ", ', G = ', '1' if G_is_1 else ('1/4τ' if G4τ_is_1 else '1/2τ'), sep='')
+    print ("PrintSettings() or help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
+    print("CreateSmallDocument() for LaTeX overview with current settings. Use the main.tex file and modify.")
+    
 #endregion
 
 
@@ -113,7 +124,8 @@ def SetupSystem():
         f1 *= 2.0
     elif (G_is_1):
         f1 = 1.0
-
+    
+    # [hbar,µ_0,c,k_B,G] in dimensions [ML²/T,ML/Q²,L/T,ML²/T²/Θ²,1/M L³/T²]]. µ0 ist genau bekannt, G ungenau, die anderen exakt
     p = [6.62607015E-34/2/n.pi, 1.25663706212E-6 / f0, 299792458.0, 1.380649E-23, 6.67430E-11 *f1] 
 
 def inPlanckUnits(valSI,dim):
@@ -154,7 +166,7 @@ def addLine(name,valueSI,dimension,color = '', comment = '', name2=''):
         document += "\\color{" + color+ "}"
 
     if comment != '':
-        comment = "\\footnote{" + comment + "}"
+        comment = "\\,$\\footnote{" + comment + "}$" #Leave math mode momentarily
 
     if name2 == '':
         name2 =  "\\cdot " + name
@@ -215,69 +227,79 @@ def baseReplace(text):
         
 
 #endregion
-#region Document
-def CreateDocument():
-    global document,base,eps0_is_1,G_is_1,G4τ_is_1
 
-    #region Comparison values
-    comp = [
-    ["Proton mass",1.67262192369E-27,M,True,'','m_p'],
-    ["Electron mass",9.10938356E-31,M,True,'','m_e'],
-    ["Elementary charge",1.60217662E-19,Q,True,'','e'],
-    ["\\si\\angstrom",1E-10,L,False,"Length in atomic and solid state physics, 1/ß10ß nm",'|'],
-    ["Bohr radius",5.29177210603E-11,L,True,'Characteristic Length in the hydrogen atom. $a_0 = \\frac1{m_\\mathrm{e}\\alpha}$','a_0'],
-    ["Fine structure constant",7.2973525693E-3,[0,0,0,0,0],True,'Fundamental constant describing strength of electromagnetism. $\\alpha=k_\\mathrm{Coulomb}e^2$','\\alpha'],
-    ["Rydberg Energy",13.605693122994*1.60217662E-19,E,True,'Ry $=\\frac{m_\\mathrm{e}\\alpha^2}2$. Lowest energy state in hydrogen is -Ry','Ry'],
-    ["|\\psi^_{100}(0)|^2",2.14806158490639E30,-3*L,False,'Maximum probability density of electron in hydrogen. $frac1{\\pi a_0^3}$',"\\rho_\\operatorname{max}"],
-    ["\\si\\eV",1.60217662E-19,E,False,'','|'],
-    ["\\hbar",6.62607015E-34/2/n.pi,E+T,False,"Quantum of angular momentum, Ratio between frequency (space/time) and momentum (momentum/Energy)"],
-    ["\\lambda_\\mathrm{yellow}",575E-9,L],
-    ["k_\\mathrm{yellow}",2*n.pi/575E-9,-L,False,"$\\frac\\tau\\lambda = k = \\omega = p = E$ (In natural units - i.e. in these units)"],
-    ["k_\\mathrm{X-Ray}",5.96075295947766E17,-L,False,'Geometric mean of upper and lower end of the X-Ray interval'],
-    [],
-    ["Earth g", 9.80665 ,M+L-T*2,True],
-    ["\\si\\cm",0.01,L,False,'','|'],
-    ["\\si\\min",60,T,False,'','|'],
-    ["hour",60*60,T,True,'','\\operatorname h'],
-    ["Liter",0.001,L*3,True,'','l'],
-    ["Area of a soccer field",7140,L*2,True,'','A'],
-    ["ß100ß \\operatorname m^2",100,L*2,False,"Size of a home"],
-    ["km/h",1/3.6,L-T,True,'','|'],
-    ["mi/h",0.44704,L-T,True,'','|'],
-    ["inch",0.0254,L,True,"ß36ß in = 1 yd = 3 ft",'\\operatorname{in}'],
-    ['mile',1609.3,L,True,'','\\operatorname{mi}'],
-    ['pound',0.45359237,M,True,'','|'],
-    ["horsepower",745.7,E-T,True,'','|'],
-    ["kcal",4186.8,E,True,'','|'],
-    ["kWh",3600000,E,True,'','|'],
-    ["Typical household electric field",7.68078,E-L-Q,True,'','E_\\mathrm H'],
-    ["Earth magnetic field",48E-6,M-T-Q],
-    ["Height of an average man",1.77,L,True,'in developed countries','\\overline h'],
-    ["Mass of an average man",70,M,True,'','\\overline m'],
-    [],
-    ["Age of the Universe",662695992000000.0,T,True,'','t_U'],
-    ["Size of the observable Universe",8.8E26,L,True,'','l_U'],
-    ["Average density of the Universe",9.9E-33,M-L*3,True,'','\\rho_U'],
-    ["Earth mass",5.972E24,M,True,'','m_E'],
-    ["Sun mass",1.98892E30,M,True,'The Schwarzschild radius of a mass $M$ is $2GM$','m_S'],
-    ["Year",24*60*60*365.2425,T,True,'','\\operatorname y'],
-    ["Speed of Light",299792458,L-T,True,'','c'],
-    ["Parsec",3.0857E16,L,True,'','\\operatorname{pc}'],
-    ["Astronomical unit",149597870700.0,L,True,'','\\operatorname{au}'],
-    ["Earth radius",6371000,L,True,'','r_E'],
-    ["Distance Earth-Moon",384400000,L,True,'',"d_M"],
-    ["Momentum of someone walking",1305,M+L-T,'','p'],
-    [],
-    ["Stefan-Boltzmann constant",5.670374419E-8,E-T-L*2-Θ*4,True,'','\\frac{\\pi^2}{ß60ß}=\\sigma'],
-    ["\\si{\\mol}",6.02214086E23,[0,0,0,0,0],False,'','|'],
-    ["Standard temperature",273.15,Θ,True,"0°C measured from absolute zero","T_0"],
-    ["Room - standard temperature",20,Θ,True,"ß20ß °C",'\\Theta_R'],
-    ["atm", 101325, M-L-T*2,True,'','|'],
-    ["c_s",343,L-T],
-    [],
-    ["\\mu_0",1.25663706212E-6,M+L-Q*2],
-    ["G",6.67430E-11,L*3-M-T*2],
-    ]
+
+#region Comparison values
+comp = [
+["Proton mass",1.67262192369E-27,M,True,'','m_p'],
+["Electron mass",9.10938356E-31,M,True,'','m_e'],
+["Elementary charge",1.60217662E-19,Q,True,'','e'],
+["\\si\\angstrom",1E-10,L,False,"Length in atomic and solid state physics, 1/ß10ß nm",'|'],
+["Bohr radius",5.29177210603E-11,L,True,'Characteristic Length in the hydrogen atom. $a_0 = \\frac1{m_\\mathrm{e}\\alpha}$','a_0'],
+["Fine structure constant",7.2973525693E-3,[0,0,0,0,0],True,'Fundamental constant describing strength of electromagnetism. $\\alpha=k_\\mathrm{Coulomb}e^2$','\\alpha'],
+["Rydberg Energy",13.605693122994*1.60217662E-19,E,True,'Ry $=\\frac{m_\\mathrm{e}\\alpha^2}2$. Lowest energy state in hydrogen is -Ry','Ry'],
+["|\\psi_{100}(0)|^2",2.14806158490639E30,-3*L,False,'Maximum probability density of electron in hydrogen. $\\frac1{\\pi a_0^3}$',"\\rho_{\\operatorname{max}}"],
+["\\si\\eV",1.60217662E-19,E,False,'','|'],
+["\\hbar",6.62607015E-34/2/n.pi,E+T,False,"Quantum of angular momentum, Ratio between frequency (space/time) and momentum (momentum/Energy)"],
+["\\lambda_\\mathrm{yellow}",575E-9,L],
+["k_\\mathrm{yellow}",2*n.pi/575E-9,-L,False,"$\\frac\\tau\\lambda = k = \\omega = p = E$ (In natural units - i.e. in these units)"],
+["k_\\mathrm{X-Ray}",5.96075295947766E17,-L,False,'Geometric mean of upper and lower end of the X-Ray interval'],
+[],
+["Earth g", 9.80665 ,M+L-T*2,True],
+["\\si\\cm",0.01,L,False,'','|'],
+["\\si\\min",60,T,False,'','|'],
+["hour",60*60,T,True,'','\\operatorname h'],
+["Liter",0.001,L*3,True,'','l'],
+["Area of a soccer field",7140,L*2,True,'','A'],
+["ß100ß \\operatorname m^2",100,L*2,False,"Size of a home"],
+["km/h",1/3.6,L-T,True,'','|'],
+["mi/h",0.44704,L-T,True,'','|'],
+["inch",0.0254,L,True,"ß36ß in = 1 yd = 3 ft",'\\operatorname{in}'],
+['mile',1609.3,L,True,'','\\operatorname{mi}'],
+['pound',0.45359237,M,True,'','|'],
+["horsepower",745.7,E-T,True,'','|'],
+["kcal",4186.8,E,True,'','|'],
+["kWh",3600000,E,True,'','|'],
+["Household electric field",7.68078,E-L-Q,True,'','E_\\mathrm H'],
+["Earth magnetic field",48E-6,M-T-Q,True,'','B_E'],
+["Height of an average man",1.77,L,True,'in developed countries','\\overline h'],
+["Mass of an average man",70,M,True,'','\\overline m'],
+[],
+["Age of the Universe",662695992000000.0,T,True,'','t_U'],
+["Size of the observable Universe",8.8E26,L,True,'','l_U'],
+["Average density of the Universe",9.9E-33,M-L*3,True,'','\\rho_U'],
+["Earth mass",5.972E24,M,True,'','m_E'],
+["Sun mass",1.98892E30,M,True,'The Schwarzschild radius of a mass $M$ is $2GM$','m_S'],
+["Year",24*60*60*365.2425,T,True,'','\\operatorname y'],
+["Speed of Light",299792458,L-T,True,'','c'],
+["Parsec",3.0857E16,L,True,'','\\operatorname{pc}'],
+["Astronomical unit",149597870700.0,L,True,'','\\operatorname{au}'],
+["Earth radius",6371000,L,True,'','r_E'],
+["Distance Earth-Moon",384400000,L,True,'',"d_M"],
+["Momentum of someone walking",1305,M+L-T,True,'','p'],
+[],
+["Stefan-Boltzmann constant",5.670374419E-8,E-T-L*2-Θ*4,True,'$\\sigma = \\frac{\\pi^2}{ß60ß}$','=\\sigma'],
+["\\si{\\mol}",6.02214086E23,[0,0,0,0,0],False,'','|'],
+["Standard temperature",273.15,Θ,True,"0°C measured from absolute zero","T_0"],
+["Room - standard temperature",20,Θ,True,"ß20ß °C",'\\Theta_R'],
+["atm", 101325, M-L-T*2,True,'','|'],
+["c_s",343,L-T],
+[],
+["\\mu_0",1.25663706212E-6,M+L-Q*2],
+["G",6.67430E-11,L*3-M-T*2],
+]
+
+#endregion
+
+#region Document
+def splitUpperCamelCase(text):
+    for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞΕΡΤΥΘΙΟΠΚΞΗΓΦΔΣΑΖΧΨΩΒΝΜЙЦУКЕНГШЩЗХЪЭЖДЛОРПАВЫФЯЧСМИТЬБЮ':
+        text = text.replace(c,' ' + c)
+    return text.strip()
+
+def CreateDocument(Systems, bases, prefixes, namesOfExponents):
+    global document,base,eps0_is_1,G_is_1,G4τ_is_1,nameOfExponent,PotRoundingFunction,comp
+
 
     #endregion
 
@@ -309,21 +331,28 @@ def CreateDocument():
 
         if G_is_1 and not eps0_is_1:
             text += "These are the usual Planck units."
-            text = text.replace("Unnamed Natural Units","Usual Planck units")
+            if partName == '':
+                partName = "Usual Planck units"
+            else:
+                text = text.replace("Unnamed Natural Units","Usual Planck units")
         if G_is_1 and eps0_is_1:
             text += "These are partially rationalized Planck units."
-            text = text.replace("Unnamed Natural Units","Partially Rationalized Planck units")
+            if partName == '':
+                partName = "Partially Rationalized Planck units"
+            else:
+                text = text.replace("Unnamed Natural Units","Partially Rationalized Planck units")
         if not G4τ_is_1 and not G_is_1 and eps0_is_1:
             text += "These are rationalized Planck units."
-            text = text.replace("Unnamed Natural Units","Rationalized Planck units")
+            if partName == '':
+                partName = "Rationalized Planck units"
+            else:
+                text = text.replace("Unnamed Natural Units","Rationalized Planck units")
         text += "}"
 
         document += text
 
         SetupSystem()
 
-        # [hbar,µ_0,c,k_B,G] in dimensions [ML²/T,ML/Q²,L/T,ML²/T²/Θ²,1/M L³/T²]]. µ0 ist genau bekannt, G ungenau, die anderen exakt
-        #endregion
         for BASE in bases:
             base = BASE
             document += "\n\\chapter{Base " + str(base) + " - " + partName + "}\n"
@@ -331,7 +360,7 @@ def CreateDocument():
             for [PRF,noE] in namesOfExponents:   
                 PotRoundingFunction = PRF
                 nameOfExponent = noE
-                document += "\n\\section{" + ' '.join(re.findall('[A-Z][^A-Z]*',PotRoundingFunction.__name__))+ " will be used and displayed as " + ' '.join(re.findall('[A-Z][^A-Z]*',nameOfExponent.__name__)) +"}"
+                document += "\n\\section{" + splitUpperCamelCase(PotRoundingFunction.__name__)+ " will be used and displayed as " + splitUpperCamelCase(nameOfExponent.__name__) +"}"
                 document += "\\begin{longtable}{l l}\n"
                 #region Comparison values
                 document += '\n\\caption*{Interesting variables for comparison:}\\\\\n'
@@ -374,29 +403,33 @@ def CreateDocument():
 
     print(document,file=open("NaturalUnits.tex",'w',encoding='utf-8'))
 
+def CreateBigDocument():
+    global Systems, bases, namesOfExponents, prefixes
+    CreateDocument(Systems,bases,prefixes,namesOfExponents)
+
+def CreateSmallDocument(withPrefixes = False):
+    global PotRoundingFunction,prefixes,nameOfExponent,eps0_is_1,G_is_1,G4τ_is_1,base
+
+    if withPrefixes:
+        PREFIXES = prefixes
+    else:
+        PREFIXES = [['',1]]
+
+    CreateDocument([[eps0_is_1,G_is_1,G4τ_is_1]],[base],PREFIXES,[[PotRoundingFunction,nameOfExponent]])
+
 #endregion
 
 #region main
 def SetExpRule():
     global PotRoundingFunction
-    PotRoundingFunction=eval(input("Set Rule (AllExponents or OnlyExponentsThatEndWithZero): "))
+    PotRoundingFunction=eval(input("Set Rule (AllExponents or OnlyExponentsThatEndWithZero or a lambda that returns nearby integer): "))
 
-def inExpr(i,string):
-    # expressions = string.split(' ')
-    # for expr in expressions:
-    #     if i < len(expr):
-    #         string = expr
-    #         break
-    #     i -= len(expr)
+def SetNameOfExponent():
+    global nameOfExponent
+    nameOfExponent=eval(input("Set name function (DividedByBase, Italic, DividedByBaseAndItalic, DividedByBaseInLojbanNumbering or a lambda that returns a LaTeX string): "))
 
-    # if ':' in string:
-    #     if string.find(':') < i:
-    #         return True
-    # if ';' in string:
-    #     if string.find(';') < i:
-    #         return True
-    j = i
-    while j >= 0:
+def inExpr(j,string):
+    while j > 0:
         j -= 1
         if string[j] == ';' or string[j] == ':':
             return True
@@ -404,15 +437,15 @@ def inExpr(i,string):
             return False
     return False
 
-
 def Evaluate(inputString:str):
+    global inputBase,Ans
     inputString = inputString.strip()
     if inputString == '#':
         return Ans
     
     for i in range(len(inputString)):
         c = inputString[i]
-        if inExpr(i,inputString) or (c == '-' and i>0 and inputString[i-1] == 'E'):
+        if inExpr(i,inputString) or (c == '-' and i>0 and inputString[i-1].lower() == 'e'):
             pass
         else:
             if c == '-':
@@ -457,9 +490,10 @@ def Evaluate(inputString:str):
     for comm in inputString.split(';'):
         if comm == '':
             continue
-        if inputValue == 0:
+        if inputValue == 0: #Assume comm represents a number
+            comm = comm.lower()
             try:
-                stuff = (comm+'E0').split('E')
+                stuff = (comm+'e0').split('e')
                 mantissa = stuff[0]
                 if not '.' in mantissa:
                     mantissa += '.'
@@ -476,38 +510,99 @@ def Evaluate(inputString:str):
                 print(e)
                 continue
     return inPlanckUnits(inputValue,Dim)
-    
-commands = {"exit": lambda:exit(),  
-            "SetExpRule": SetExpRule}
-PrintSettings()
-SetupSystem()
-inputBase = base
-Ans = 0
-while True:
-    inputString = input()
-    if inputString == '':
-        continue
-    if inputString in commands:
-        commands[inputString]()
-        continue
-    if re.match("[0-9=\\-+]",inputString[0]):
-        if inputString[0] == '=':
-            inputString = inputString[1:]
-        inputString = inputString.replace('kg',' 1;M ').replace('s',' 1;T ').replace('m',' 1;L '  ).replace('C',' 1;Q ').replace('K',' 1;Θ ').replace('J',' 1;E ')
-        Ans = Evaluate(inputString)
-        [_,_,pot,valStr,_] = inBase(Ans)
-        #[m,l,t,q,θ] = Dim
-        print(valStr +' '+nameOfExponent(pot))#+f"M^{m}·L^{l}·T^{t}·Q^{q}·Θ^{θ}")
 
-    else:
-        try:
-            print(eval(inputString))
-        except Exception as e:
+def MAIN():  
+    global inputBase, Ans
+    commands = {"exit": lambda:exit(),  
+                "set name of exponent": SetNameOfExponent,
+                "set exp rule": SetExpRule,
+                "help":PrintSettings}
+    SetupSystem()
+    inputBase = base
+    PrintSettings()
+    Ans = 0
+    while True:
+        inputString = input()
+        if inputString == '':
+            continue
+        Comm = splitUpperCamelCase(inputString).lower()
+        if Comm in commands:
+            commands[Comm]()
+            continue
+        if re.match("[0-9=\\-+]",inputString[0]):
+            if inputString[0] == '=':
+                inputString = inputString[1:]
+            inputString = inputString.replace('kg',' 1;M ').replace('s',' 1;T ').replace('m',' 1;L '  ).replace('C',' 1;Q ').replace('K',' 1;Θ ').replace('J',' 1;E ')
+            Ans = Evaluate(inputString)
+            [_,_,pot,valStr,_] = inBase(Ans)
+            #[m,l,t,q,θ] = Dim
+            print(valStr +' '+nameOfExponent(pot))#+f"M^{m}·L^{l}·T^{t}·Q^{q}·Θ^{θ}")
+
+        else:
             try:
-                exec(inputString)
+                stuff = eval(inputString)
+                if stuff == None:
+                    print('Done.')
+                else:
+                    print(stuff)
             except Exception as e:
-                print(e)
-                continue
+                try:
+                    exec(inputString)
+                except Exception as e:
+                    print(e)
+                    continue
 
 
 #endregion
+
+#region Hacking Stuff
+
+def installPackagePip(package):
+    import os
+    os.system('pip install '+package)
+
+
+def uploadToDrive(filePath):
+    try:
+        from pydrive.auth import GoogleAuth
+        from pydrive.drive import GoogleDrive
+    except:
+        installPackagePip('PyDrive')
+        from pydrive.auth import GoogleAuth
+        from pydrive.drive import GoogleDrive
+    import datetime
+
+    gauth = GoogleAuth()
+    #gauth.LoadCredentialsFile('mycreds.txt')
+    if gauth.credentials is None:
+        
+        gauth.CommandLineAuth()
+    elif gauth.access_token_expired:
+        # Refresh them if expired
+        gauth.Refresh()
+    else:
+        # Initialize the saved creds
+        gauth.Authorize()
+    gauth.SaveCredentialsFile("credentials.json")
+
+    drive = GoogleDrive(gauth)
+
+    texfile = drive.CreateFile({'title': 'NaturalUnits' + str(datetime.datetime.utcnow())+".tex"})
+    texfile.SetContentFile(filePath)
+    texfile.Upload()
+    #print ('Uploaded',texfile)
+    texfile.InsertPermission({'type': 'anyone', 'value': 'anyone', 'role': 'reader'})
+
+    return texfile['alternateLink']
+
+def GetTexFile():
+    while input("Upload NaturalUnits.tex to Google Drive? This requires installation of the module PyDrive. I will attempt to use your os's console for that. If you don't want that, install it yourself. You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
+        if input("x to abort") == 'x':
+            return
+    link = uploadToDrive('NaturalUnits.tex')
+    print("It worked: Here is the link to your file: ")
+    print(link)
+
+
+#endregion
+MAIN()

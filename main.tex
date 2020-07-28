@@ -9,11 +9,12 @@
 \usepackage[automark]{scrlayer-scrpage}
 \pagestyle{scrheadings}
 \addtokomafont{pagenumber}{\oldstylenums}
-\clearscrheadfoot %% <-----
+
+\clearscrheadfoot 
 \rehead[\pagemark]{\pagemark}
 \lehead{\headmark}
 \lohead[\pagemark]{\pagemark}
-\rohead{\headmark}% right odd head <===================================
+\rohead{\headmark}% right odd head 
 
 %\areaset[0cm]{191mm}{250mm}
 \usepackage[bottom = 1cm, left = 1cm,top=2cm,right = 1 cm]{geometry}
@@ -27,10 +28,14 @@
 \usepackage{textgreek}
 \usepackage{csquotes}
 %\usepackage[lf]{MinionPro}
+
+%%%%%%%%%%%%%%%%%%%%%% REMOVE THIS IF YOU DON'T HAVE THIS FONT:
+
 \usepackage[
 	scale=1,
 	lf,
 	sansmath]{MyriadPro}
+
 %\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{color}
@@ -50,24 +55,25 @@
 %	backend=biber,
 %	style=phys,
 %	biblabel=brackets]{biblatex}
-\usepackage{xspace}
-%\usepackage{upgreek} % bitte einbauen, falls MinionPro nicht verwendet
+
+%\usepackage{xspace}
+
+\definecolor{gray}{gray}{0.5}
+\definecolor{light-gray}{gray}{0.85}
+\definecolor{darkblue}{rgb}{0.05,0,0.55}
 
 \hypersetup
 {
 	colorlinks	= true,
-	linkcolor   = blue, 
+	linkcolor   = darkblue, 
 	citecolor   = blue,
 	bookmarksnumbered = true,
-	urlcolor    = blue,
-	pdfauthor   = {Johannes Heißler},
+	urlcolor    = darkblue,
+	pdfauthor   = {TheByteBreaker's NaturalUnits},
 	pdftitle    = {Natural Units in different base systems},
 	pdfsubject  = {System of natural units},
 	pdfkeywords = {Fundamental, Units, Base 6}
 }
-\definecolor{gray}{gray}{0.5}
-\definecolor{light-gray}{gray}{0.85}
-%\hyphenation{Hoch-tem-pera-tur-su-pra-lei-tern Ku-pfer-atomen}
 
 %\input{commands.tex}
 %\input{colors.tex}
