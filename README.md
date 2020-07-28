@@ -3,8 +3,18 @@ This provides a calculator for natural units (preferred: eps0 = 1, G = 1) in dif
 
 Usage:
 Enter number or expression à la:
-14E-3;M+L-T
-=J/C
-inputBase=10
-base=7
-=#/s
+* 14E-3;M+L-T
+* =J/C
+* =#/s
+
+Enter python code à la:
+
+* inputBase=10
+* base=7
+
+ˋeps0_is_1 = False 
+  SetupSystem()ˋ
+
+Enter commands like:
+* SetExpRule
+* exit
