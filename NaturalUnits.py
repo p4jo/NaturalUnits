@@ -74,7 +74,7 @@ def PrintSettings():
     print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__, ', input base: ', inputBase,sep='')
     print ("eps0 = ", '1' if eps0_is_1 else "1/2τ", ', G = ', '1' if G_is_1 else ('1/4τ' if G4τ_is_1 else '1/2τ'), sep='')
     print ("PrintSettings() or help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
-    print("CreateSmallDocument() for LaTeX overview with current settings. Use the main.tex file and modify.")
+    print("CreateSmallDocument() for LaTeX overview with current settings. Use the main.tex file and modify. GetTexFiles() to do that.")
     
 #endregion
 
@@ -567,6 +567,9 @@ def uploadToDrive(filePath):
         from pydrive.auth import GoogleAuth
         from pydrive.drive import GoogleDrive
     except:
+        while input("This requires installation of the module PyDrive. I will attempt to use your os's console for that. If you don't want that, install it yourself. You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
+            if input("x to abort") == 'x':
+                return None
         installPackagePip('PyDrive')
         from pydrive.auth import GoogleAuth
         from pydrive.drive import GoogleDrive
@@ -595,13 +598,18 @@ def uploadToDrive(filePath):
 
     return texfile['alternateLink']
 
-def GetTexFile():
-    while input("Upload NaturalUnits.tex to Google Drive? This requires installation of the module PyDrive. I will attempt to use your os's console for that. If you don't want that, install it yourself. You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
+def GetTexFiles():
+    while input("Upload NaturalUnits.tex to Google Drive? You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
         if input("x to abort") == 'x':
             return
     link = uploadToDrive('NaturalUnits.tex')
-    print("It worked: Here is the link to your file: ")
+    if link is None:
+        print("Aborted.")
+        return
+    print("Here is the link to the NaturalUnits.tex file (Created by CreateDocument): ")
     print(link)
+    print("And here is the link for a working main.tex")
+    print()
 
 
 #endregion
