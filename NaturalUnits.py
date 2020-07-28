@@ -296,7 +296,7 @@ comp = [
 def splitUpperCamelCase(text):
     for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞΕΡΤΥΘΙΟΠΚΞΗΓΦΔΣΑΖΧΨΩΒΝΜЙЦУКЕНГШЩЗХЪЭЖДЛОРПАВЫФЯЧСМИТЬБЮ':
         text = text.replace(c,' ' + c)
-    return text.strip()
+    return text.replace('  ',' ').strip()
 
 def CreateDocument(Systems, bases, prefixes, namesOfExponents):
     global document,base,eps0_is_1,G_is_1,G4τ_is_1,nameOfExponent,PotRoundingFunction,comp
