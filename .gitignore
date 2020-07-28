@@ -2,3 +2,6 @@
 !*.pdf
 !*.py
 !*.tex
+!client_secrets.json
+!credentials.json
+!*.yaml
