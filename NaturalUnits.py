@@ -66,11 +66,13 @@ namesOfExponents = [[OnlyExponentsThatEndWithZero,DividedByBaseAndItalic], [AllE
 
 
 base = 6
+inputBase = 6
 [eps0_is_1,G_is_1,G4τ_is_1] = [True,True,False]
 PotRoundingFunction = OnlyExponentsThatEndWithZero
 nameOfExponent = DividedByBaseInLojbanNumbering
 
 def PrintSettings():
+    global base, inputBase, nameOfExponent, PotRoundingFunction, eps0_is_1,G_is_1,G4τ_is_1
     print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__, ', input base: ', inputBase,sep='')
     print ("eps0 = ", '1' if eps0_is_1 else "1/2τ", ', G = ', '1' if G_is_1 else ('1/4τ' if G4τ_is_1 else '1/2τ'), sep='')
     print ("Type help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
@@ -423,11 +425,11 @@ def CreateSmallDocument(withPrefixes = False):
 #region main
 def SetExpRule():
     global PotRoundingFunction
-    PotRoundingFunction=eval(input("Set Rule (AllExponents or OnlyExponentsThatEndWithZero or a lambda that returns nearby integer): "))
+    PotRoundingFunction=Eval(input("Set Rule (AllExponents or OnlyExponentsThatEndWithZero or a lambda that returns nearby integer): "))
 
 def SetNameOfExponent():
     global nameOfExponent
-    nameOfExponent=eval(input("Set name function (DividedByBase, Italic, DividedByBaseAndItalic, DividedByBaseInLojbanNumbering or a lambda that returns a LaTeX string): "))
+    nameOfExponent=Eval(input("Set name function (DividedByBase, Italic, DividedByBaseAndItalic, DividedByBaseInLojbanNumbering or a lambda that returns a LaTeX string): "))
 
 def inExpr(j,string):
     while j > 0:
@@ -437,6 +439,12 @@ def inExpr(j,string):
         if string[j] == ' ':
             return False
     return False
+
+def Eval(text):
+    return eval(text,globals(),globals())
+
+def Exec(text):
+    exec(text,globals(),globals())
 
 def Evaluate(inputString:str):
     global inputBase,Ans
@@ -506,14 +514,14 @@ def Evaluate(inputString:str):
 
         elif inputValue != 0:
             try:
-                Dim = f*eval(comm)
+                Dim = f*Eval(comm)
             except Exception as e:
                 print(e)
                 continue
     return inPlanckUnits(inputValue,Dim)
 
 def MAIN():  
-    global inputBase, Ans
+    global inputBase, Ans, base
     commands = {"exit": lambda:exit(),  
                 "set name of exponent": SetNameOfExponent,
                 "set exp rule": SetExpRule,
@@ -541,14 +549,14 @@ def MAIN():
 
         else:
             try:
-                stuff = eval(inputString)
+                stuff = Eval(inputString)
                 if stuff == None:
                     print('Done.')
                 else:
                     print(stuff)
             except Exception as e:
                 try:
-                    exec(inputString)
+                    Exec(inputString)
                 except Exception as e:
                     print(e)
                     continue
@@ -616,4 +624,5 @@ def GetPDF():
     print("Here is the big PDF File you can download:")
     print('https://drive.google.com/file/d/1V1Ly5PT4ujwJQhp9PtsHHDrpRnzAiYEn/view?usp=sharing')
 #endregion
+
 MAIN()
