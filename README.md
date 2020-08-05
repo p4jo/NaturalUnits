@@ -36,8 +36,8 @@ Visit https://www.seximal.net/ for jan Misali's plea for using this base.
 
 Obviously kilo, milli, and powers of those aren't useful in any other base, so it is sensible to use a different system of measurement.
 
-Natural units are those in which the unit quantities are chosen in a way that make frequent conversion factors between physical dimensions disappear (by having _value_ 1) and give us a deeper understanding of the universe as they make dimensions become less and less distinct from one another:
-* <img src="https://bit.ly/3gwB3bJ" align="center" border="0" alt="c=1" width="42" height="15" />: Time T and Space become the same dimension the more you think about space-time (Relativity). This means velocity is expressed in units of c. Also energy is momentum in time direction; electric and magnetic fields are part of one field. 
-* <img src="https://bit.ly/39YpmYJ" align="center" border="0" alt="\hbar =1" width="45" height="15" />: Momentum is related to the change of the wave function: <img src="https://bit.ly/3gwA6QH" align="center" border="0" alt="p^\mu =\pm i\hbar \partial_\mu" width="72" height="15" />
-* <img src="https://bit.ly/3fxioej" align="center" border="0" alt="\varepsilon_0=\mu_0=1" width="78" height="15" />: Electric and magnetic fields equations are simple and clean, no thought required.
-<img src="https://bit.ly/2XxthXl" align="center" border="0" alt="\frac1{\varepsilon_0}=\mu_0=2\tau" width="102" height="40" />
+Natural units are those in which the unit quantities are chosen in a way that make frequent conversion factors between physical dimensions disappear (their value in this system is 1) and give us a deeper understanding of the universe as they make dimensions become less and less distinct from one another:
+* <img src="https://bit.ly/3gwB3bJ" align="center" border="0" alt="c=1" width="42" height="15" />: Time T and Space L become the same dimension the more you think about the concepts of relativity. Also, energy is momentum in time direction and electric and magnetic fields are part of one field and therefore are also comparable. 
+* <img src="https://bit.ly/39YpmYJ" align="center" border="0" alt="\hbar =1" width="45" height="15" />: Momentum is related to the change of the wave function: <img src="https://bit.ly/3gwA6QH" align="center" border="0" alt="p^\mu =\pm i\hbar \partial_\mu" width="102" height="40" />
+* <img src="https://bit.ly/2Pt023y" align="center" border="0" alt="\varepsilon_0=\mu_0=1" width="78" height="15" />: Electric and magnetic fields equations are simple and clean, no thought required.
+<img src="https://bit.ly/39WlIi4" align="center" border="0" alt="\frac1{\varepsilon_0}=\mu_0=2\tau" width="102" height="40" />
