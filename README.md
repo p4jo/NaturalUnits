@@ -1,6 +1,6 @@
 # NaturalUnits
-This provides a calculator for natural units in different bases (preferred: six / 6). Also provides document with lookup and comparison values. 
-This is an attempt to make these units usable in any situation (every-day quantities and every scale of science), without sounding strange like "times ten to the thirty kilograms" by using a naming scheme explained below.
+Provides a calculator for natural units and programmatically generated documents with lookup and comparison values expressed in these units. 
+This is an attempt to make natural units usable in any situation (every-day quantities and every scale of science) by using a naming scheme explained below, and at the same time creating a system of units for base 6.
 
 ## Usage:
 Enter number or expression like the following. `value;Dimension` converts from SI to natural units, `value:Dimension` from natural units to SI. Dimensions are written additively.
