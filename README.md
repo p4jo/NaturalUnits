@@ -61,5 +61,7 @@ Since - like jan Misali - I like conlangs, especially lojban, the logical langua
 
 So every power of <img src="http://chart.apis.google.com/chart?cht=tx&chl=10%5E%7B10%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> will be assigned the name of the exponent expressed in lojban.
 You can therefore call 3 eV a ni'u-pano-Energy or a second a paci-Time. (The dimension is optional, those values were in rationalized Planck units (6-RPU)). 
+
 Feel free to suggest different naming schemes at Issues.
+
 For more comparison values and SI values refer to the pdf-document in this repository. It was the original goal of this project and produced by python code that generated LaTeX code.
