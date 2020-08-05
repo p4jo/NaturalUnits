@@ -21,7 +21,7 @@ Enter commands like:
 * `exit`
 
 Make (partial) LaTeX document: `CreateSmallDocument()`. 
-Or `CreateDocument(complicated parameters - look at the code)` or change the parameters at the top of the python script (e.g. in the command line) and run `CreateBigDocument()`
+Or `CreateDocument(complicated parameters)` or change the parameters at the top of the python script (e.g. in the command line) and run `CreateBigDocument()`
 
 ## Versions:
 There is a hosted version:
@@ -43,10 +43,10 @@ Natural units are those in which the unit quantities are chosen in a way that ma
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=c%3D1&chf=bg%2Cs%2CFFFFFF80&chco=000000&chs=20">: Time T and Space L become the same dimension the more you think about the concepts of relativity. Also, energy is momentum in time direction and electric and magnetic fields are part of one field and therefore are also comparable. It is a huge relief of not having to carry around 1/c factors on only one component of a 4D quantity.
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Chbar%20%3D%201&chf=bg%2Cs%2CFFFFFF80&chco=000000&chs=20">: Momentum is related to the change of the wave function: <img src="http://chart.apis.google.com/chart?cht=tx&chl=p%5E%5Cmu%3D%5Cpm%20i%5Chbar%5Cpartial_%5Cmu&chf=bg%2Cs%2CFFFFFF80&chco=000000">. The angular momentum of an atomic electron is quantized in units of <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Chbar%20%3D%201&chf=bg%2Cs%2CFFFFFF80&chco=000000&chs=20">.
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B%5Cvarepsilon_0%7D%3D%5Cmu_0%3D1&chf=bg%2Cs%2CFFFFFF80&chco=000000">: Electric and magnetic fields equations are clean and fundamental, especially <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cnabla%20%5Ccdot%20E%20%3D%20%5Crho&chf=bg%2Cs%2CFFFFFF80&chco=000000">. This defines [partially] rationalized Planck units. Charge becomes a dimensionless quantity, however the elementary charge is only close to 1, not 1.
-* <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B%5Cvarepsilon_0%7D%3D%5Cmu_0%3D2%5Ctau&chf=bg%2Cs%2CFFFFFF80&chco=000000">: Often a <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B2%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> factor from dilution in three dimensions (area of the 2-sphere) appears together with these constants (energy and force of point charges) and this can be convenient, however this is not fundamental and creates counterintuitive constants in the fundamental equations. This is used in Gaußian cgs-units and standard Planck units. 
+* <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B%5Cvarepsilon_0%7D%3D%5Cmu_0%3D2%5Ctau&chf=bg%2Cs%2CFFFFFF80&chco=000000">: Often a <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B2%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> factor from diffusion in three dimensions (area of the 2-sphere) appears together with these constants (energy and force of point charges), therefore this system can be convenient. However this is not fundamental and creates counterintuitive constants in the fundamental equations. This is used in Gaußian cgs-units and standard Planck units. 
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=G%20%3D%201&chf=bg%2Cs%2CFFFFFF80&chco=000000">: This
 takes a similar approach to the Gaußian units.
-* <img src="http://chart.apis.google.com/chart?cht=tx&chl=G%20%3D%20%5Cfrac1%7B2%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000">: This rationalizes the gravitational field as above and simplifies equations in some way related to areas of spheres. Creates Rationalized Planck units, the most fundamental natural units of these.
+* <img src="http://chart.apis.google.com/chart?cht=tx&chl=G%20%3D%20%5Cfrac1%7B2%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000">: This rationalizes the gravitational field as above and simplifies equations that are in some way related to areas of spheres. Creates Rationalized Planck units, the most fundamental natural units of these.
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=G%20%3D%20%5Cfrac1%7B4%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000">: This makes the equations of general relativity a bit cleaner.
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=k_%7B%5Cmathrm%7BB%7D%7D%20%3D%201&chf=bg%2Cs%2CFFFFFF80&chco=000000">: Temperature is very much related to energy.
 
@@ -57,7 +57,7 @@ Since - like jan Misali - I like conlangs, especially lojban, the logical langua
 * Names of numbers are the concatenation of the digits: 10 = pano (alt. xa [xa]), 11 = papa (alt. ze [ze]), 12 = pare (alt. bi), ...
 * The number unary minus (as in 'negative 3') is ni'u [nihu], which can - without interference with other words - be shortened to niu (I am not very happy using this one). For example -1254 = ni'u pa ki'o remuvo
 * The digit point (not really encouraged to use in this system) is pi. For example <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Ctau%20%3D%2010.141100...%20%3D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> pano pi pavopa panono...
-Feel free to suggest different naming schemes in the issues part.
+Feel free to suggest different naming schemes at Issues.
 
 So every power of <img src="http://chart.apis.google.com/chart?cht=tx&chl=10%5E%7B10%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> will be assigned the name of the exponent expressed in lojban.
 You can therefore call 3 eV a ni'u-pano-Energy or a second a paci-Time. (The dimension is optional, those values were in rationalized Planck units (6-RPU)). 
