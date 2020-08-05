@@ -55,7 +55,7 @@ Since the values of 1 in the different dimensions (as listed in the document) ar
 Since - like jan Misali - I like conlangs, especially lojban, the logical language, I thought of naming the exponents (divided by 10) like in lojban: 
 * 0 = no, 1 = pa, 2 = re, 3 = ci [ʃi], 4 = vo [vo], 5 = mu, ... (there are named digits up to 23 (hexadecimal))
 * Names of numbers are the concatenation of the digits: 10 = pano (alt. xa [xa]), 11 = papa (alt. ze [ze]), 12 = pare (alt. bi), ...
-* The number unary minus (as in 'negative 3') is ni'u [nihu], which can - without interference with other words - be shortened to niu (I am not very happy using this one). For example -1254 = ni'u pa ki'o remuvo
+* The number-unary minus (as in 'negative 3') is ni'u [nihu], which can - without interference with other words - be shortened to niu (I am not very happy using this one). For example -1254 = ni'u pa ki'o remuvo
 * The digit point (not really encouraged to use in this system) is pi. For example <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Ctau%20%3D%2010.141100...%20%3D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> pano pi pavopa panono...
 Feel free to suggest different naming schemes at Issues.
 
