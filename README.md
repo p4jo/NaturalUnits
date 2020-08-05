@@ -57,8 +57,9 @@ Since - like jan Misali - I like conlangs, especially lojban, the logical langua
 * Names of numbers are the concatenation of the digits: 10 = pano (alt. xa [xa]), 11 = papa (alt. ze [ze]), 12 = pare (alt. bi), ...
 * The number-unary minus (as in 'negative 3') is ni'u [nihu], which can - without interference with other words - be shortened to niu (I am not very happy using this one). For example -1254 = ni'u pa ki'o remuvo
 * The digit point (not really encouraged to use in this system) is pi. For example <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Ctau%20%3D%2010.141100...%20%3D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> pano pi pavopa panono...
-Feel free to suggest different naming schemes at Issues.
+
 
 So every power of <img src="http://chart.apis.google.com/chart?cht=tx&chl=10%5E%7B10%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> will be assigned the name of the exponent expressed in lojban.
 You can therefore call 3 eV a ni'u-pano-Energy or a second a paci-Time. (The dimension is optional, those values were in rationalized Planck units (6-RPU)). 
+Feel free to suggest different naming schemes at Issues.
 For more comparison values and SI values refer to the pdf-document in this repository. It was the original goal of this project and produced by python code that generated LaTeX code.
