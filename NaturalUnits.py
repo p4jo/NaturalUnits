@@ -73,10 +73,11 @@ nameOfExponent = DividedByBaseInLojbanNumbering
 
 def PrintSettings():
     global base, inputBase, nameOfExponent, PotRoundingFunction, eps0_is_1,G_is_1,G4τ_is_1
+    print ("Full explanation and code at http://github.com/p4jo/NaturalUnits")
     print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__, ', input base: ', inputBase,sep='')
     print ("eps0 = ", '1' if eps0_is_1 else "1/2τ", ', G = ', '1' if G_is_1 else ('1/4τ' if G4τ_is_1 else '1/2τ'), sep='')
     print ("Type help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
-    print("CreateSmallDocument() for LaTeX overview with current settings. Use the main.tex file and modify. GetTexFiles() to do that.")
+    print("CreateSmallDocument() for LaTeX overview with current settings. Use the main.tex file to build. You can 'Get Tex files'")
     print('GetPDF() to get the full many-option compiled document.')
     
 #endregion
