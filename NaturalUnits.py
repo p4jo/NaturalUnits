@@ -455,8 +455,8 @@ def Evaluate(inputString:str):
     for i in range(len(inputString)):
         c = inputString[i]
         if inExpr(i,inputString) or (c == '-' and i>0 and inputString[i-1].lower() == 'e'):
-            pass
-        else:
+            pass #ignore Expressions after ; or : or E or e (dimensions or negative exponential)
+        else: #replace only to single chars to not mess up this loop
             if c == '-':
                 inputString = inputString[:i] + '_' + inputString[i+1:]
             if c == '+':
@@ -527,7 +527,8 @@ def MAIN():
                 "set exp rule": SetExpRule,
                 "help":PrintSettings,
                 "get tex files":GetTexFiles,
-                "get pdf": GetPDF
+                "get pdf": GetPDF,
+                "create small document": CreateSmallDocument
                 }
     SetupSystem()
     inputBase = base
@@ -557,7 +558,7 @@ def MAIN():
                     print('Done.')
                 else:
                     print(stuff)
-            except Exception as e:
+            except:
                 try:
                     Exec(inputString)
                 except Exception as e:
@@ -570,8 +571,8 @@ def MAIN():
 #region Hacking Stuff
 def uploadToDrive(filePath):
     import imp
+    #import UploadStuff
     UploadStuff = imp.load_source('UploadStuff','UploadStuff.notpy')
-    #import UploadStuff as ext
     return UploadStuff.uploadToDrive(filePath)
 
 def GetTexFiles():

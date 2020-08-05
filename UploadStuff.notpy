@@ -27,9 +27,11 @@ def uploadToDrive(filePath):
     import datetime
 
     gauth = GoogleAuth()
-    gauth.LoadCredentialsFile('credentials.json')
+    #gauth.LoadCredentialsFile('credentials.json')
     if gauth.credentials is None:
-        
+        print("The Google OAuth2 authentification has to be renewed. You can't do that.")
+        if input('Enter anything to abort') != 'IchWillAber':
+            return
         gauth.CommandLineAuth()
     elif gauth.access_token_expired:
         # Refresh them if expired
@@ -37,7 +39,7 @@ def uploadToDrive(filePath):
     else:
         # Initialize the saved creds
         gauth.Authorize()
-    gauth.SaveCredentialsFile("credentials.json")
+    #gauth.SaveCredentialsFile("credentials.json")
 
     drive = GoogleDrive(gauth)
 
