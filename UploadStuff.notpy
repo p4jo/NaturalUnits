@@ -1,0 +1,50 @@
+## This file has no .py ending, because 
+
+#import sys
+
+
+def installPackagePip(package):
+    #import pip #Too old wrapper, expects wrong version of pip. Works with a warning
+    #pip.main(['install',package])
+
+    #import subprocess # better than os, but too complicated
+    #subprocess.call(['pip install '+package]) 
+    
+    import os
+    os.system('pip install ' + package)
+
+def uploadToDrive(filePath):
+    try:
+        from pydrive.auth import GoogleAuth
+        from pydrive.drive import GoogleDrive
+    except:
+        while input("This requires installation of the module PyDrive. I will attempt to use your os's console for that. If you don't want that, install it yourself. You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
+            if input("x to abort") == 'x':
+                return None
+        installPackagePip('PyDrive')
+        from pydrive.auth import GoogleAuth
+        from pydrive.drive import GoogleDrive
+    import datetime
+
+    gauth = GoogleAuth()
+    gauth.LoadCredentialsFile('credentials.json')
+    if gauth.credentials is None:
+        
+        gauth.CommandLineAuth()
+    elif gauth.access_token_expired:
+        # Refresh them if expired
+        gauth.Refresh()
+    else:
+        # Initialize the saved creds
+        gauth.Authorize()
+    gauth.SaveCredentialsFile("credentials.json")
+
+    drive = GoogleDrive(gauth)
+
+    texfile = drive.CreateFile({'title': 'NaturalUnits' + str(datetime.datetime.utcnow())+".tex"})
+    texfile.SetContentFile(filePath)
+    texfile.Upload()
+    #print ('Uploaded',texfile)
+    texfile.InsertPermission({'type': 'anyone', 'value': 'anyone', 'role': 'reader'})
+
+    return texfile['alternateLink']
