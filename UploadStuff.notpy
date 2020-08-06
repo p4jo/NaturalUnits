@@ -1,7 +1,6 @@
-## This file has no .py ending, because 
-
-#import sys
-
+## This file has no .py ending, because repl.it automatically installs PyDrive on any startup of the
+#  webpage if it detects a python file with 'import pydrive' in it  which takes far too long.
+# Installation will be done from inside
 
 def installPackagePip(package):
     #import pip #Too old wrapper, expects wrong version of pip. Works with a warning
@@ -19,7 +18,7 @@ def uploadToDrive(filePath):
         from pydrive.drive import GoogleDrive
     except:
         while input("This requires installation of the module PyDrive. I will attempt to use your os's console for that. If you don't want that, install it yourself. You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
-            if input("x to abort") == 'x':
+            if input("Enter x to abort: ") == 'x':
                 return None
         installPackagePip('PyDrive')
         from pydrive.auth import GoogleAuth
