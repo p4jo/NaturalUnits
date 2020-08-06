@@ -24,11 +24,11 @@ def OnlyExponentsThatEndWithZero(pot):
 def AllExponents(pot):
     return pot
 
+
 def Italic(pot: int):
     if pot == 0:
         return ''
-    return "\\textit{" +n.base_repr(pot,base)+"}-"
-    
+    return "\\textit{" +n.base_repr(pot,base)+"}-" 
 
 def DividedByBase(pot:int):
     if pot == 0:
@@ -46,22 +46,23 @@ def DividedByBaseAndItalic(pot):
         return ''
     return "\\textit{" + text + '}-'
 
-def DividedByBaseInLojbanNumbering(pot:int):
+def DividedByBaseInLojbanNumberingUpperCamelCase(pot:int):
     
     text = DividedByBase(pot)
     if text == '':
         return ''
-    return text.replace('A','Dau').replace('B','Fei').replace('C','Gai').replace('D','Jau').replace('E','Rei').replace('F','Vai').replace('0','No').replace('1','Pa').replace('2','Re').replace('3','Ci').replace('4','Vo').replace('5','Mu').replace('6','Xa').replace('7','Ze').replace('8','Bi').replace('9','So').replace('-',"Ni'u").lower()+'-' 
-
+    return text.replace('A','Dau').replace('B','Fei').replace('C','Gai').replace('D','Jau').replace('E','Rei').replace('F','Vai').replace('0','No').replace('1','Pa').replace('2','Re').replace('3','Ci').replace('4','Vo').replace('5','Mu').replace('6','Xa').replace('7','Ze').replace('8','Bi').replace('9','So').replace('-',"Ni'u")+'-' 
+def DividedByBaseInLojbanNumbering(pot:int):
+    return DividedByBaseInLojbanNumberingUpperCamelCase(pot).lower()
 #[True -> ε0 = 1; False -> 2τε0 = 1,
 # True -> G=1 ,
 # True -> G4τ = 1; False -> G2τ = 1]
-Systems = [[True,True,False],[False,True,False],[True,False,False],[False,False,True]]
+Systems = [[True,False,False],[True,True,False],[False,True,False],[True,False,True]]#,[False,False,True]]
 
 digits = 6
-bases = [6,10,12]
+bases = [6,8,10]
 prefixes =  [["m",1E-3], ["",1], ["k",1E3]] #[["",1]]#
-namesOfExponents = [[OnlyExponentsThatEndWithZero,DividedByBaseAndItalic], [AllExponents,DividedByBaseAndItalic], [OnlyExponentsThatEndWithZero,DividedByBaseInLojbanNumbering]] #: (exponent)->LaTeX text string
+namesOfExponents = [[OnlyExponentsThatEndWithZero,DividedByBaseInLojbanNumbering], [OnlyExponentsThatEndWithZero,DividedByBaseAndItalic], [AllExponents,DividedByBaseAndItalic], ] #: (exponent)->LaTeX text string
 
 
 
@@ -242,7 +243,7 @@ comp = [
 ["Bohr radius",5.29177210603E-11,L,True,'Characteristic Length in the hydrogen atom. $a_0 = \\frac1{m_\\mathrm{e}\\alpha}$','a_0'],
 ["Fine structure constant",7.2973525693E-3,[0,0,0,0,0],True,'Fundamental constant describing strength of electromagnetism. $\\alpha=k_\\mathrm{Coulomb}e^2$','\\alpha'],
 ["Rydberg Energy",13.605693122994*1.60217662E-19,E,True,'Ry $=\\frac{m_\\mathrm{e}\\alpha^2}2$. Lowest energy state in hydrogen is -Ry','Ry'],
-["|\\psi_{100}(0)|^2",2.14806158490639E30,-3*L,False,'Maximum probability density of electron in hydrogen. $\\frac1{\\pi a_0^3}$',"\\rho_{\\operatorname{max}}"],
+["|\\psi_{100}(0)|^2",2.14806158490639E30,-3*L,False,'Maximum probability density of electron in hydrogen - at the core. $\\frac1{\\pi a_0^3}$',"\\rho_{\\operatorname{max}}"],
 ["\\si\\eV",1.60217662E-19,E,False,'','|'],
 ["\\hbar",6.62607015E-34/2/n.pi,E+T,False,"Quantum of angular momentum, Ratio between frequency (space/time) and momentum (momentum/Energy)"],
 ["\\lambda_\\mathrm{yellow}",575E-9,L],
