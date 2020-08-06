@@ -34,7 +34,7 @@ You can also clone this repo.
 ## Why this system?
 Base six is objectively better than any other base due to its factors and size. Ten is not terrible but arbitrary and doesn't handle thirds or sevenths well. Twelve is a lot worse than 6 and so is every other base, especially primes.
 Visit https://www.seximal.net/ for jan Misali's plea for using this base.
-Also see there for how to say base-six numbers (10 = six, 11 = seven, ..., 20 = twelve, 100 = nif, 10000 = unexian, ...).
+Also look there for how to say base-six numbers (10 = six, 11 = seven, ..., 20 = twelve, 100 = nif, 10000 = unexian, ...).
 
 Obviously kilo, milli, and powers of those aren't useful in any other base, so it is sensible to use a different system of measurement.
 
