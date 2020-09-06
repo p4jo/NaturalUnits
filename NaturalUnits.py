@@ -54,23 +54,38 @@ def DividedByBaseInLojbanNumberingUpperCamelCase(pot:int):
     return text.replace('A','Dau').replace('B','Fei').replace('C','Gai').replace('D','Jau').replace('E','Rei').replace('F','Vai').replace('0','No').replace('1','Pa').replace('2','Re').replace('3','Ci').replace('4','Vo').replace('5','Mu').replace('6','Xa').replace('7','Ze').replace('8','Bi').replace('9','So').replace('-',"Ni'u")+'-' 
 def DividedByBaseInLojbanNumbering(pot:int):
     return DividedByBaseInLojbanNumberingUpperCamelCase(pot).lower()
+digits = 6
 #[True -> ε0 = 1; False -> 2τε0 = 1,
 # True -> G=1 ,
 # True -> G4τ = 1; False -> G2τ = 1]
-Systems = [[True,False,False],[True,True,False],[False,True,False],[True,False,True]]#,[False,False,True]]
+Systems = [
+    [True,False,False],
+    [True,True,False],
+    [False,True,False],
+    [True,False,True],
+    ]
 
-digits = 6
-bases = [6,8,10]
-prefixes =  [["m",1E-3], ["",1], ["k",1E3]] #[["",1]]#
-namesOfExponents = [[OnlyExponentsThatEndWithZero,DividedByBaseInLojbanNumbering], [OnlyExponentsThatEndWithZero,DividedByBaseAndItalic], [AllExponents,DividedByBaseAndItalic], ] #: (exponent)->LaTeX text string
+bases = [
+    6,
+    10,
+    ]
+prefixes =  [
+    ["m",1E-3],
+    ["",1],
+    ["k",1E3],
+    ] 
+namesOfExponents = [
+    [OnlyExponentsThatEndWithZero,DividedByBaseInLojbanNumbering],
+    [OnlyExponentsThatEndWithZero,DividedByBaseAndItalic],
+    [AllExponents,DividedByBaseAndItalic],
+    ] #: (exponent)->LaTeX text string
 
 
 
 base = 6
-inputBase = 6
-[eps0_is_1,G_is_1,G4τ_is_1] = [True,True,False]
-PotRoundingFunction = OnlyExponentsThatEndWithZero
-nameOfExponent = DividedByBaseInLojbanNumbering
+inputBase = 10
+[eps0_is_1,G_is_1,G4τ_is_1] = Systems[0]
+[PotRoundingFunction,nameOfExponent] = namesOfExponents[0]
 
 def PrintSettings():
     global base, inputBase, nameOfExponent, PotRoundingFunction, eps0_is_1,G_is_1,G4τ_is_1
@@ -78,8 +93,8 @@ def PrintSettings():
     print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__, ', input base: ', inputBase,sep='')
     print ("eps0 = ", '1' if eps0_is_1 else "1/2τ", ', G = ', '1' if G_is_1 else ('1/4τ' if G4τ_is_1 else '1/2τ'), sep='')
     print ("Type help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
-    print("CreateSmallDocument() for LaTeX overview with current settings. Use the main.tex file to build. You can 'Get Tex files'")
-    print('GetPDF() to get the full many-option compiled document.')
+    print ("'create small document' for LaTeX overview with current settings. Use the main.tex file to build. You can 'Get Tex files'")
+    print ("'get pdf' to get the full many-option compiled document.")
     
 #endregion
 
@@ -117,7 +132,6 @@ def inBase(value:float):
     mantissa = sign + mantissa
     return [mantissa + exp, (value if sign == '' else -value), Pot, mantissa, exp]
 
-Conv = nl.inv(n.array([[1,2,-1,0,0], [1,1,0,-2,0], [0,1,-1,0,0], [1,2,-2,0,-1], [-1,3,-2,0,0]]))
 
 def SetupSystem():
     global p, eps0_is_1, G_is_1, G4τ_is_1
@@ -132,6 +146,7 @@ def SetupSystem():
     
     # [hbar,µ_0,c,k_B,G] in dimensions [ML²/T,ML/Q²,L/T,ML²/T²/Θ²,1/M L³/T²]]. µ0 ist genau bekannt, G ungenau, die anderen exakt
     p = [6.62607015E-34/2/n.pi, 1.25663706212E-6 / f0, 299792458.0, 1.380649E-23, 6.67430E-11 *f1] 
+Conv = nl.inv(n.array([[1,2,-1,0,0], [1,1,0,-2,0], [0,1,-1,0,0], [1,2,-2,0,-1], [-1,3,-2,0,0]]))
 
 def inPlanckUnits(valSI,dim):
     global p, Conv
@@ -146,23 +161,28 @@ def inPlanckUnits(valSI,dim):
 
 def starRating(number, preDistance = '\\quad'):
     global base
-    β2 = n.base_repr(base-1,base)
-    β2 += β2
-    result = ''
+    β = n.base_repr(base-1,base)
+    number = str(number).replace('.','')
     for i in range(len(number)):
-        if number[i] != '0' and number[i] != '.':
+        if number[i] != '0':
             number = number[i:]
             break
-    if ("00" in number or β2 in number):
-        result += preDistance + "("
-        while "00" in number:
-            number = number.replace("00",'0')
-            result += "*"
-        while β2 in number:
-            number = number.replace(β2,β2[0])
-            result += "*"
-        result += ")"
-    return result
+
+    l = [''] #Find long strings of 0es or βs to determine exactness
+    l.extend(re.compile("(0+0)").findall(number)) 
+    l.extend(re.compile("(" + β + "+" + β + ")").findall(number))
+    #print([len(s) for s in l])
+    stars = max([len(s) for s in l])
+
+    if stars <= 1:
+        return ''
+    if stars == 2:
+        stars = 1
+    if stars == 3:
+        stars = 2
+    if stars > 3:
+        stars = 3
+    return preDistance + "(" + ('*' * stars) + ')'
 
 def addLine(name,valueSI,dimension,color = '', comment = '', name2=''):
     global document
@@ -288,7 +308,7 @@ comp = [
 ["Standard temperature",273.15,Θ,True,"0°C measured from absolute zero","T_0"],
 ["Room - standard temperature",20,Θ,True,"ß20ß °C",'\\Theta_R'],
 ["atm", 101325, M-L-T*2,True,'','|'],
-["Particle density at STP", 2.6884557E25,-3*L, 'Ideal gas law: $N/V = p/T=T_0/\\operatorname{atm}$, 'n_0'],
+["Particle density at STP", 2.6884557E25,-3*L, True, 'Ideal gas law: $N/V = p/T=\\operatorname{atm}/T_0$', 'n_0'],
 ["Speed of sound in air",343,L-T, True, '' , 'c_s'],
 [],
 ["\\mu_0",1.25663706212E-6,M+L-Q*2],
@@ -306,12 +326,8 @@ def splitUpperCamelCase(text):
 def CreateDocument(Systems, bases, prefixes, namesOfExponents):
     global document,base,eps0_is_1,G_is_1,G4τ_is_1,nameOfExponent,PotRoundingFunction,comp
 
-
-    #endregion
-
     for SYSTEM in Systems:
         [eps0_is_1,G_is_1,G4τ_is_1] = SYSTEM
-        #region Dimensionen [M,L,T,Q,Θ] und Basiseinheiten
         text = ''
         if len(Systems) == 1:
             scope = "document"
@@ -444,10 +460,12 @@ def inExpr(j,string):
     return False
 
 def Eval(text):
-    return eval(text,globals(),globals())
+    return eval(text,globals())
 
 def Exec(text):
-    exec(text,globals(),globals())
+    exec(text,globals())
+
+# Will soon be reworked to feature python syntax and SI unit names
 
 def Evaluate(inputString:str):
     global inputBase,Ans
