@@ -3,24 +3,24 @@ Provides a calculator for natural units and programmatically generated documents
 This is an attempt to make natural units usable in any situation (every-day quantities and every scale of science) by using a naming scheme explained below, and at the same time creating a system of units for base 6.
 
 ## Usage:
-Enter number or expression like the following. `value;Dimension` converts from SI to natural units, `value:Dimension` from natural units to SI. Dimensions are written additively.
-* `14E-3;M+L-T`
+Enter number or expression like the following:
+This is currently gering reworked, so momentarily only decimal input is parsed.
 * `=J/C`
-* `=#/s`
-* `55;E*2-Θ + # -31.4E22 *2E3`
+* `23*K*m/C**2` Currently it is necessary to specify multiplication
+* `=TeV`
 
 Enter python code à la:
 
 * `inputBase=10`
 * `base=7` (output base)
-* Change the System of natural units: `eps0_is_1 = False` or: `G_is_1 = False` and afterwards: `SetupSystem()`
 
 Enter commands like:
 * `SetExpRule` / `setExp rule` ...
 * `set name of exponents` / `SetName of exponents` ...
 * `exit`
+* `change system`
 
-Make (partial) LaTeX document: `CreateSmallDocument()`. 
+Make (partial) LaTeX document: `CreateSmallDocument`. 
 Or `CreateDocument(complicated parameters)` or change the parameters at the top of the python script (e.g. in the command line) and run `CreateBigDocument()`
 
 ## Versions:
@@ -43,7 +43,7 @@ Natural units are those in which the unit quantities are chosen in a way that ma
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=c%3D1&chf=bg%2Cs%2CFFFFFF80&chco=000000&chs=20">: Time T and Space L become the same dimension the more you think about the concepts of relativity. Also, energy is momentum in time direction and electric and magnetic fields are part of one field and therefore are also comparable. It is a huge relief of not having to carry around 1/c factors on only one component of a 4D quantity.
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Chbar%20%3D%201&chf=bg%2Cs%2CFFFFFF80&chco=000000&chs=20">: Momentum is related to the change of the wave function: <img src="http://chart.apis.google.com/chart?cht=tx&chl=p%5E%5Cmu%3D%5Cpm%20i%5Chbar%5Cpartial_%5Cmu&chf=bg%2Cs%2CFFFFFF80&chco=000000">. The angular momentum of an atomic electron is quantized in units of <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Chbar%20%3D%201&chf=bg%2Cs%2CFFFFFF80&chco=000000&chs=20">.
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B%5Cvarepsilon_0%7D%3D%5Cmu_0%3D1&chf=bg%2Cs%2CFFFFFF80&chco=000000">: Electric and magnetic fields equations are clean and fundamental, especially <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cnabla%20%5Ccdot%20E%20%3D%20%5Crho&chf=bg%2Cs%2CFFFFFF80&chco=000000">. This defines [partially] rationalized Planck units. Charge becomes a dimensionless quantity, however the elementary charge is only close to 1, not 1.
-* <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B%5Cvarepsilon_0%7D%3D%5Cmu_0%3D2%5Ctau&chf=bg%2Cs%2CFFFFFF80&chco=000000">: Often a <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B2%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> factor from diffusion in three dimensions (area of the 2-sphere) appears together with these constants (energy and force of point charges), therefore this system can be convenient. However this is not fundamental and creates counterintuitive constants in the fundamental equations. This is used in Gaußian cgs-units and standard Planck units. 
+* <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B%5Cvarepsilon_0%7D%3D%5Cmu_0%3D2%5Ctau&chf=bg%2Cs%2CFFFFFF80&chco=000000">: Often a <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Cfrac1%7B2%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000"> factor from diffusion in three dimensions (area of the 2-sphere) appears together with these constants (most notably energy and force of point charges are simplified), therefore this system can be convenient. However this is not fundamental and creates counterintuitive constants in the fundamental equations. This is used in Gaußian cgs-units and standard Planck units. 
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=G%20%3D%201&chf=bg%2Cs%2CFFFFFF80&chco=000000">: This
 takes a similar approach to the Gaußian units.
 * <img src="http://chart.apis.google.com/chart?cht=tx&chl=G%20%3D%20%5Cfrac1%7B2%5Ctau%7D&chf=bg%2Cs%2CFFFFFF80&chco=000000">: This rationalizes the gravitational field as above and simplifies equations that are in some way related to areas of spheres. Creates Rationalized Planck units, the most fundamental natural units of these.
