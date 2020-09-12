@@ -14,9 +14,22 @@ E = n.array([1,2,-2,0,0])
 p=[]
 document = ''
 
+upperLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞΕΡΤΥΘΙΟΠΚΞΗΓΦΔΣΑΖΧΨΩΒΝΜЙЦУКЕНГШЩЗХЪЭЖДЛОРПАВЫФЯЧСМИТЬБЮ'
+
+UsualConstants = {
+        'mol' : 6.02214076E23,
+        'e' : n.e,
+        'exp' : n.exp,
+        'pi' : n.pi,
+        'π' : n.pi,
+        'τ' : 2*n.pi,
+        'tau' : 2*n.pi,
+        'sqrt' : n.sqrt,
+    }
+
 #endregion
 
-#region Parameter
+#region exponent names and rules
 
 def OnlyExponentsThatEndWithZero(pot): 
     return int(round(pot/base)*base)
@@ -51,10 +64,15 @@ def DividedByBaseInLojbanNumberingUpperCamelCase(pot:int):
     text = DividedByBase(pot)
     if text == '':
         return ''
-    return text.replace('A','Dau').replace('B','Fei').replace('C','Gai').replace('D','Jau').replace('E','Rei').replace('F','Vai').replace('0','No').replace('1','Pa').replace('2','Re').replace('3','Ci').replace('4','Vo').replace('5','Mu').replace('6','Xa').replace('7','Ze').replace('8','Bi').replace('9','So').replace('-',"Ni'u")+'-' 
+    return text.replace('F','Vai').replace('B','Fei').replace('C','Gai').replace('D','Jau').replace('A','Dau').replace('E','Rei').replace('0','No').replace('1','Pa').replace('2','Re').replace('3','Ci').replace('4','Vo').replace('5','Mu').replace('6','Xa').replace('7','Ze').replace('8','Bi').replace('9','So').replace('-',"Ni'u")+'-' 
+
 def DividedByBaseInLojbanNumbering(pot:int):
     return DividedByBaseInLojbanNumberingUpperCamelCase(pot).lower()
-digits = 6
+
+#endregion
+
+#region Parameters
+
 #[True -> ε0 = 1; False -> 2τε0 = 1,
 # True -> G=1 ,
 # True -> G4τ = 1; False -> G2τ = 1]
@@ -81,21 +99,12 @@ namesOfExponents = [
     ] #: (exponent)->LaTeX text string
 
 
-
+digits = 6
 base = 6
 inputBase = 10
-[eps0_is_1,G_is_1,G4τ_is_1] = Systems[0]
+[µ0Is1,GIs1,G4τIs1] = Systems[0]
 [PotRoundingFunction,nameOfExponent] = namesOfExponents[0]
 
-def PrintSettings():
-    global base, inputBase, nameOfExponent, PotRoundingFunction, eps0_is_1,G_is_1,G4τ_is_1
-    print ("Full explanation and code at http://github.com/p4jo/NaturalUnits")
-    print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__, ', input base: ', inputBase,sep='')
-    print ("eps0 = ", '1' if eps0_is_1 else "1/2τ", ', G = ', '1' if G_is_1 else ('1/4τ' if G4τ_is_1 else '1/2τ'), sep='')
-    print ("Type help to show this. You can change parameters like eps0_is_1, G_is_1, G4τ_is_1, base, inputBase.")
-    print ("'create small document' for LaTeX overview with current settings. Use the main.tex file to build. You can 'Get Tex files'")
-    print ("'get pdf' to get the full many-option compiled document.")
-    
 #endregion
 
 
@@ -134,21 +143,41 @@ def inBase(value:float):
 
 
 def SetupSystem():
-    global p, eps0_is_1, G_is_1, G4τ_is_1
-    f0 = 4*n.pi
-    f1 = f0
-    if (eps0_is_1) :
+    global p, µ0Is1, GIs1, G4τIs1, UsualConstants
+    f0 = f1 = 4*n.pi
+    if µ0Is1:
         f0 = 1.0
-    if(G4τ_is_1):
+    if G4τIs1:
         f1 *= 2.0
-    elif (G_is_1):
+    elif GIs1:
         f1 = 1.0
     
-    # [hbar,µ_0,c,k_B,G] in dimensions [ML²/T,ML/Q²,L/T,ML²/T²/Θ²,1/M L³/T²]]. µ0 ist genau bekannt, G ungenau, die anderen exakt
+    # [hbar,µ_0,c,k_B,G] in dimensions [ML²/T,ML/Q²,L/T,ML²/T²/Θ²,1/M L³/T²]]. µ0 ist known to great precision, G is not, the others are exact.
     p = [6.62607015E-34/2/n.pi, 1.25663706212E-6 / f0, 299792458.0, 1.380649E-23, 6.67430E-11 *f1] 
+
+    UsualConstants.update({
+        'g' : inNaturalUnits(1e-3,M),
+        'm' : inNaturalUnits(1,L),
+        's' : inNaturalUnits(1,T),
+        'C' : inNaturalUnits(1,Q),
+        'K' : inNaturalUnits(1,Θ),
+        'N' : inNaturalUnits(1,M+L-2*T),
+        'J' : inNaturalUnits(1,E),
+        'eV' : inNaturalUnits(1.60217662E-19,E),
+        'V' : inNaturalUnits(1,E-Q),
+        'A' : inNaturalUnits(1,Q-T),
+        'W' : inNaturalUnits(1,E-T),
+        'Ω' : inNaturalUnits(1,E-Q*2+T),
+        'T' : inNaturalUnits(1,M-T-Q),
+        'Hz' : inNaturalUnits(1,-T),
+        'F' : inNaturalUnits(1,2*Q-E),
+        'min' : inNaturalUnits(60,T),
+        'h' : inNaturalUnits(3600,T),
+        'y' : inNaturalUnits(3600*24*365.2524,T),
+    })
 Conv = nl.inv(n.array([[1,2,-1,0,0], [1,1,0,-2,0], [0,1,-1,0,0], [1,2,-2,0,-1], [-1,3,-2,0,0]]))
 
-def inPlanckUnits(valSI,dim):
+def inNaturalUnits(valSI,dim):
     global p, Conv
     dim = n.matmul(n.array(dim), Conv) #Dimension Conversion
     for i in range(5):
@@ -172,15 +201,15 @@ def starRating(number, preDistance = '\\quad'):
     l.extend(re.compile("(0+0)").findall(number)) 
     l.extend(re.compile("(" + β + "+" + β + ")").findall(number))
     #print([len(s) for s in l])
-    stars = max([len(s) for s in l])
+    length = max([len(s) for s in l])
 
-    if stars <= 1:
+    if length <= 1:
         return ''
-    if stars == 2:
+    if length == 2:
         stars = 1
-    if stars == 3:
+    if length == 3:
         stars = 2
-    if stars > 3:
+    if length > 3:
         stars = 3
     return preDistance + "(" + ('*' * stars) + ')'
 
@@ -200,13 +229,13 @@ def addLine(name,valueSI,dimension,color = '', comment = '', name2=''):
     if not name2.startswith('\\cdot'):
         name2 = '\\,' + name2
     
-    [valstr,_,_,mantissa,_] = inBase(inPlanckUnits(valueSI,dimension))
+    [valstr,_,_,mantissa,_] = inBase(inNaturalUnits(valueSI,dimension))
 
     document += "$"+name + comment + ' = ' + valstr +" $"
     document += starRating(mantissa) + "&\n\t"
     if color != '':
         document += "\\color{" + color+ "}"
-    [valstr,_,pot,mantissa,exp] = inBase(1/inPlanckUnits(valueSI,dimension))
+    [valstr,_,pot,mantissa,exp] = inBase(1/inNaturalUnits(valueSI,dimension))
 
     if pot != 0:
         exp = exp.replace('\\cdot','').replace('{','ß').replace('ß-','{').replace('ß','{-')
@@ -319,51 +348,52 @@ comp = [
 
 #region Document
 def splitUpperCamelCase(text):
-    for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞΕΡΤΥΘΙΟΠΚΞΗΓΦΔΣΑΖΧΨΩΒΝΜЙЦУКЕНГШЩЗХЪЭЖДЛОРПАВЫФЯЧСМИТЬБЮ':
+    for c in upperLetters:
         text = text.replace(c,' ' + c)
     return text.replace('  ',' ').strip()
 
 def CreateDocument(Systems, bases, prefixes, namesOfExponents):
-    global document,base,eps0_is_1,G_is_1,G4τ_is_1,nameOfExponent,PotRoundingFunction,comp
+    global document,base,µ0Is1,GIs1,G4τIs1,nameOfExponent,PotRoundingFunction,comp
 
     for SYSTEM in Systems:
-        [eps0_is_1,G_is_1,G4τ_is_1] = SYSTEM
+        [µ0Is1,GIs1,G4τIs1] = SYSTEM
+        #region explain System
         text = ''
         if len(Systems) == 1:
             scope = "document"
             partName = ''
         else:
             scope = "part"
-            partName = "\\nameref{part"+str(eps0_is_1)+str(G_is_1)+str(G4τ_is_1)+"}"
-            text += "\\part{Unnamed Natural Units}\\label{part"+str(eps0_is_1)+str(G_is_1)+str(G4τ_is_1)+"}\n"
+            partName = "\\nameref{part"+str(µ0Is1)+str(GIs1)+str(G4τIs1)+"}"
+            text += "\\part{Unnamed Natural Units}\\label{part"+str(µ0Is1)+str(GIs1)+str(G4τIs1)+"}\n"
         text += "{\\large This " + scope +" uses natural units, where $\\epsilon_0 = "
         
-        if eps0_is_1:
+        if µ0Is1:
             text += "1"
         else:
             text += "\\frac1{2\\tau}"
         text += "$ and $G="
-        if G4τ_is_1:
+        if G4τIs1:
             text += "\\frac1{4\\tau}"
-        elif G_is_1:
+        elif GIs1:
             text += "1"
         else:
             text += "\\frac1{2\\tau}"
         text += "$. "
 
-        if G_is_1 and not eps0_is_1:
+        if GIs1 and not µ0Is1:
             text += "These are the usual Planck units."
             if partName == '':
                 partName = "Usual Planck units"
             else:
                 text = text.replace("Unnamed Natural Units","Usual Planck units")
-        if G_is_1 and eps0_is_1:
+        if GIs1 and µ0Is1:
             text += "These are partially rationalized Planck units."
             if partName == '':
                 partName = "Partially Rationalized Planck units"
             else:
                 text = text.replace("Unnamed Natural Units","Partially Rationalized Planck units")
-        if not G4τ_is_1 and not G_is_1 and eps0_is_1:
+        if not G4τIs1 and not GIs1 and µ0Is1:
             text += "These are rationalized Planck units."
             if partName == '':
                 partName = "Rationalized Planck units"
@@ -372,12 +402,12 @@ def CreateDocument(Systems, bases, prefixes, namesOfExponents):
         text += "}"
 
         document += text
-
+        #endregion
         SetupSystem()
 
         for BASE in bases:
             base = BASE
-            document += "\n\\chapter{Base " + str(base) + " - " + partName + "}\n"
+            document += "\n\\chapter{Base " + str(base) + " - " + partName + "}\n" # Heading
             print(base)
             for [PRF,noE] in namesOfExponents:   
                 PotRoundingFunction = PRF
@@ -420,7 +450,6 @@ def CreateDocument(Systems, bases, prefixes, namesOfExponents):
                             
                 #endregion
                 
-
                 document += "\\end{longtable}"
 
     print(document,file=open("NaturalUnits.tex",'w',encoding='utf-8'))
@@ -428,20 +457,179 @@ def CreateDocument(Systems, bases, prefixes, namesOfExponents):
 def CreateBigDocument():
     global Systems, bases, namesOfExponents, prefixes
     CreateDocument(Systems,bases,prefixes,namesOfExponents)
+    print('Compilation of this document will take a long time. Test it with a small document first.')
 
 def CreateSmallDocument(withPrefixes = False):
-    global PotRoundingFunction,prefixes,nameOfExponent,eps0_is_1,G_is_1,G4τ_is_1,base
-
-    if withPrefixes:
-        PREFIXES = prefixes
-    else:
-        PREFIXES = [['',1]]
-
-    CreateDocument([[eps0_is_1,G_is_1,G4τ_is_1]],[base],PREFIXES,[[PotRoundingFunction,nameOfExponent]])
+    global PotRoundingFunction,prefixes,nameOfExponent,µ0Is1,GIs1,G4τIs1,base
+    CreateDocument([[µ0Is1,GIs1,G4τIs1]],[base],prefixes if withPrefixes else [['',1]],[[PotRoundingFunction,nameOfExponent]])
 
 #endregion
 
-#region main
+
+#region Parse and Convert
+
+def isLetter(c):
+    return c in upperLetters or c in upperLetters.lower()
+
+SIPrefixes = {
+		"Y" : 1e24,
+        "Z" : 1e21,
+        "E" : 1e18,
+        "P" : 1e15,
+        "T" : 1e12,
+        "G" : 1e9,
+        "M" : 1e6,
+        "k" : 1e3,
+        "h" : 100,
+        #"da" : 10,
+        "d" : 0.1,
+        "c" : 0.01,
+        "m" : 1e-3, 
+        "µ" : 1e-6,
+        "n" : 1e-9,
+        "p" : 1e-12,
+        "f" : 1e-15,
+        "a" : 1e-18,
+        "z" : 1e-21,
+        "y" : 1e-24
+}
+
+def Eval(text):
+    return eval(text,globals())
+
+def Exec(text):
+    exec(text,globals())
+
+def Evaluate(inputString:str):
+    global inputBase,Ans,UsualConstants,SIPrefixes
+    inputString = inputString.replace('^','**').replace('#','Ans')
+    wasLetter = False
+    i = 0
+    while i < len(inputString):
+        if not wasLetter and inputString[i] in SIPrefixes and (i+1 < len(inputString) and isLetter(inputString[i+1])):
+            valStrDec = str(SIPrefixes[inputString[i]])
+            inputString = inputString[0:i] + '(' + valStrDec + '*' + inputString[i+1:] 
+            i = i + len(valStrDec) + 2
+            while i < len(inputString) and isLetter(inputString[i]):
+                i += 1
+            inputString = inputString[0:i] + ')' + inputString[i:] 
+
+        wasLetter = isLetter(inputString[i])
+        i += 1
+    return eval(inputString,globals(),UsualConstants)
+
+
+# def inExpr(j,string):
+#     while j > 0:
+#         j -= 1
+#         if string[j] == ';' or string[j] == ':':
+#             return True
+#         if string[j] == ' ':
+#             return False
+#     return False
+
+# def OldEvaluate(inputString:str):
+#     global inputBase,Ans
+#     inputString = inputString.strip()
+#     if inputString == '#':
+#         return Ans
+    
+#     for i in range(len(inputString)):
+#         c = inputString[i]
+#         if inExpr(i,inputString) or (c == '-' and i>0 and inputString[i-1].lower() == 'e'):
+#             pass #ignore Expressions after ; or : or E or e (dimensions or negative exponential)
+#         else: #replace only to single chars to not mess up this loop
+#             if c == '-':
+#                 inputString = inputString[:i] + '_' + inputString[i+1:]
+#             if c == '+':
+#                 inputString = inputString[:i] + '†' + inputString[i+1:]
+#             if c == '/' or c == '\\':
+#                 inputString = inputString[:i] + '\\' + inputString[i+1:]
+#             if c == '*':
+#                 inputString = inputString[:i] + '·' + inputString[i+1:]
+
+#     inputString = inputString.replace('_','†~').replace('\\','·÷').replace('††','†').replace('··','·')
+
+#     summands = inputString.split('†')
+#     #print(summands)
+#     if len(summands) > 1:
+#         result = 0
+#         for summand in summands:
+#             if summand.startswith('~'):
+#                 result -= Evaluate(summand[1:])
+#             else:
+#                 result += Evaluate(summand)
+#         return result
+
+#     factors = inputString.split('·')
+#     if len(factors) > 1:
+#         result = 1
+#         for factor in factors:
+#             if factor.startswith('÷'):
+#                 result /= Evaluate(factor[1:])
+#             else:
+#                 result *= Evaluate(factor)
+#         return result
+            
+#     if ';' in inputString:
+#         f = 1
+#     if ':' in inputString:
+#         f = -1
+#         inputString = inputString.replace(':',";")
+#     inputValue = 0.0
+#     Dim=[0,0,0,0,0]
+#     for comm in inputString.split(';'):
+#         if comm == '':
+#             continue
+#         if inputValue == 0: #Assume comm represents a number
+#             comm = comm.lower()
+#             try:
+#                 stuff = (comm+'e0').split('e')
+#                 mantissa = stuff[0]
+#                 if not '.' in mantissa:
+#                     mantissa += '.'
+#                 exp = stuff[1]
+#                 inputValue = int(mantissa.replace('.',''),inputBase) * inputBase**(int(exp,inputBase) - (len(mantissa) - 1 - mantissa.index('.') ))
+#             except Exception as e:
+#                 print(e)
+#                 continue
+
+#         elif inputValue != 0:
+#             try:
+#                 Dim = f*Eval(comm)
+#             except Exception as e:
+#                 print(e)
+#                 continue
+#     return inNaturalUnits(inputValue,Dim)
+
+#endregion
+
+#region UploadStuff
+def uploadToDrive(filePath): #this function lives in UploadStuff.notpy
+    import imp
+    #import UploadStuff
+    UploadStuff = imp.load_source('UploadStuff','UploadStuff.notpy')
+    return UploadStuff.uploadToDrive(filePath)
+
+def GetTexFiles():
+    while input("Upload NaturalUnits.tex to Google Drive? You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
+        if input("x to abort") == 'x':
+            return
+    link = uploadToDrive('NaturalUnits.tex')
+    if link is None:
+        print("Aborted.")
+        return
+    print("Here is the link to the NaturalUnits.tex file (Created by CreateDocument): ")
+    print(link)
+    print("And here is the link for a working main.tex you can compile it with: ")
+    print("https://drive.google.com/file/d/16QJnW8IxFz8L5wj7aBWjT4TJNiIiIiT-/view?usp=sharing")
+
+def GetPDF():
+    print("Here is the big PDF File you can download:")
+    print('https://drive.google.com/file/d/1V1Ly5PT4ujwJQhp9PtsHHDrpRnzAiYEn/view?usp=sharing')
+#endregion
+
+#region User Interaction
 def SetExpRule():
     global PotRoundingFunction
     PotRoundingFunction=Eval(input("Set Rule (AllExponents or OnlyExponentsThatEndWithZero or a lambda that returns nearby integer): "))
@@ -450,127 +638,72 @@ def SetNameOfExponent():
     global nameOfExponent
     nameOfExponent=Eval(input("Set name function (DividedByBase, Italic, DividedByBaseAndItalic, DividedByBaseInLojbanNumbering or a lambda that returns a LaTeX string): "))
 
-def inExpr(j,string):
-    while j > 0:
-        j -= 1
-        if string[j] == ';' or string[j] == ':':
-            return True
-        if string[j] == ' ':
-            return False
-    return False
+def PrintSettings():
+    global base, inputBase, nameOfExponent, PotRoundingFunction, µ0Is1,GIs1,G4τIs1
+    print ("Full explanation, code and documents at http://github.com/p4jo/NaturalUnits")
+    print ("Base: ",base,", name of exponent: ",nameOfExponent.__name__, ', exponent rule: ', PotRoundingFunction.__name__,sep='')
+    print ("µ0 = ", '1' if µ0Is1 else "2τ", ', G = ', '1' if GIs1 else ('1/4τ' if G4τIs1 else '1/2τ'), ', input base: ', inputBase, sep='')
+    print ("Type help to show this. You can 'change system', or set values for base and inputBase.")
+    print ("'create small document' for LaTeX overview with current settings. Use the main.tex file to build. You can 'Get Tex files'")
+    print ("'get pdf' to get the full many-option compiled document.")
 
-def Eval(text):
-    return eval(text,globals())
+def ChangeSystem():
+    global µ0Is1, GIs1, G4τIs1
+    a = input("Value for µ0 = 1/ε0: a) 1, b) 2τ = 4π ")
+    b = input("Value for G: a) 1/2τ, b) 1, c) 1/4τ")
+    if a == 'a':
+        µ0Is1 = True
+    if a == 'b':
+        µ0Is1 = False
+    if b == 'a':
+        G4τIs1 = False
+        GIs1 = False
+    if b == 'b':
+        G4τIs1 = False
+        GIs1 = True
+    if b == 'c':
+        G4τIs1 = True
+        GIs1 = False
 
-def Exec(text):
-    exec(text,globals())
+    SetupSystem()
 
-# Will soon be reworked to feature python syntax and SI unit names
-
-def Evaluate(inputString:str):
-    global inputBase,Ans
-    inputString = inputString.strip()
-    if inputString == '#':
-        return Ans
+commands = {
+    "exit": lambda:exit(),  
+    "set name of exponent": SetNameOfExponent,
+    "set exp rule": SetExpRule,
+    "help": PrintSettings,
+    "?": PrintSettings,
+    "get tex files": GetTexFiles,
+    "get pdf": GetPDF,
+    "get p d f": GetPDF,
+    "create small document": CreateSmallDocument,
+    "create big document": CreateBigDocument,
+    "change system": ChangeSystem,
+}
     
-    for i in range(len(inputString)):
-        c = inputString[i]
-        if inExpr(i,inputString) or (c == '-' and i>0 and inputString[i-1].lower() == 'e'):
-            pass #ignore Expressions after ; or : or E or e (dimensions or negative exponential)
-        else: #replace only to single chars to not mess up this loop
-            if c == '-':
-                inputString = inputString[:i] + '_' + inputString[i+1:]
-            if c == '+':
-                inputString = inputString[:i] + '†' + inputString[i+1:]
-            if c == '/' or c == '\\':
-                inputString = inputString[:i] + '\\' + inputString[i+1:]
-            if c == '*':
-                inputString = inputString[:i] + '·' + inputString[i+1:]
-
-    inputString = inputString.replace('_','†~').replace('\\','·÷').replace('††','†').replace('··','·')
-
-    summands = inputString.split('†')
-    #print(summands)
-    if len(summands) > 1:
-        result = 0
-        for summand in summands:
-            if summand.startswith('~'):
-                result -= Evaluate(summand[1:])
-            else:
-                result += Evaluate(summand)
-        return result
-
-    factors = inputString.split('·')
-    if len(factors) > 1:
-        result = 1
-        for factor in factors:
-            if factor.startswith('÷'):
-                result /= Evaluate(factor[1:])
-            else:
-                result *= Evaluate(factor)
-        return result
-            
-    if ';' in inputString:
-        f = 1
-    if ':' in inputString:
-        f = -1
-        inputString = inputString.replace(':',";")
-    inputValue = 0.0
-    Dim=[0,0,0,0,0]
-    for comm in inputString.split(';'):
-        if comm == '':
-            continue
-        if inputValue == 0: #Assume comm represents a number
-            comm = comm.lower()
-            try:
-                stuff = (comm+'e0').split('e')
-                mantissa = stuff[0]
-                if not '.' in mantissa:
-                    mantissa += '.'
-                exp = stuff[1]
-                inputValue = int(mantissa.replace('.',''),inputBase) * inputBase**(int(exp,inputBase) - (len(mantissa) - 1 - mantissa.index('.') ))
-            except Exception as e:
-                print(e)
-                continue
-
-        elif inputValue != 0:
-            try:
-                Dim = f*Eval(comm)
-            except Exception as e:
-                print(e)
-                continue
-    return inPlanckUnits(inputValue,Dim)
-
 def MAIN():  
     global inputBase, Ans, base
-    commands = {"exit": lambda:exit(),  
-                "set name of exponent": SetNameOfExponent,
-                "set exp rule": SetExpRule,
-                "help":PrintSettings,
-                "get tex files":GetTexFiles,
-                "get pdf": GetPDF,
-                "create small document": CreateSmallDocument
-                }
+    
     SetupSystem()
     inputBase = base
     PrintSettings()
     Ans = 0
     while True:
-        inputString = input()
+        inputString = input().strip()
         if inputString == '':
             continue
         Comm = splitUpperCamelCase(inputString).lower()
         if Comm in commands:
             commands[Comm]()
             continue
-        if re.match("[0-9=\\-+]",inputString[0]):
+        if re.match("[0-9=\\-\\+]",inputString[0]): # Interpret as actual input to convert
             if inputString[0] == '=':
                 inputString = inputString[1:]
-            inputString = inputString.replace('kg',' 1;M ').replace('s',' 1;T ').replace('m',' 1;L '  ).replace('C',' 1;Q ').replace('K',' 1;Θ ').replace('J',' 1;E ')
+            #inputString = inputString.replace('kg',' 1;M ').replace('s',' 1;T ').replace('m',' 1;L '  ).replace('C',' 1;Q ').replace('K',' 1;Θ ').replace('J',' 1;E ')
             Ans = Evaluate(inputString)
             [_,_,pot,valStr,_] = inBase(Ans)
             #[m,l,t,q,θ] = Dim
-            print(valStr +' '+nameOfExponent(pot))#+f"M^{m}·L^{l}·T^{t}·Q^{q}·Θ^{θ}")
+            print(valStr, nameOfExponent(pot))#+f"M^{m}·L^{l}·T^{t}·Q^{q}·Θ^{θ}")
 
         else:
             try:
@@ -587,31 +720,6 @@ def MAIN():
                     continue
 
 
-#endregion
-
-#region Hacking Stuff
-def uploadToDrive(filePath):
-    import imp
-    #import UploadStuff
-    UploadStuff = imp.load_source('UploadStuff','UploadStuff.notpy')
-    return UploadStuff.uploadToDrive(filePath)
-
-def GetTexFiles():
-    while input("Upload NaturalUnits.tex to Google Drive? You probably only call this function on the repl.it server. In this case you may proceed. (y/n)") != 'y':
-        if input("x to abort") == 'x':
-            return
-    link = uploadToDrive('NaturalUnits.tex')
-    if link is None:
-        print("Aborted.")
-        return
-    print("Here is the link to the NaturalUnits.tex file (Created by CreateDocument): ")
-    print(link)
-    print("And here is the link for a working main.tex you can compile with ")
-    print("https://drive.google.com/file/d/16QJnW8IxFz8L5wj7aBWjT4TJNiIiIiT-/view?usp=sharing")
-
-def GetPDF():
-    print("Here is the big PDF File you can download:")
-    print('https://drive.google.com/file/d/1V1Ly5PT4ujwJQhp9PtsHHDrpRnzAiYEn/view?usp=sharing')
 #endregion
 
 MAIN()
