@@ -121,7 +121,11 @@ def inBase(value:float):
     value = n.abs(value)
 
     baseToTheDigitsMinus1 = base ** (digits-1)
-    approxPot = int(n.log2(value) / n.log2(base))
+    try:
+        approxPot = int(n.log2(value) / n.log2(base))
+    except OverflowError:
+        print("Value to large")
+        return inBase(0)
     pot = digits-1 + approxPot+1
     value *= base**(-approxPot-1)
     while n.round(value) < baseToTheDigitsMinus1:
@@ -186,7 +190,6 @@ def inNaturalUnits(valSI,dim):
 #endregion
 
 #region output
-
 
 def starRating(number, preDistance = '\\quad'):
     global base
@@ -516,7 +519,12 @@ def Evaluate(inputString:str):
 
         wasLetter = isLetter(inputString[i])
         i += 1
-    return eval(inputString,globals(),UsualConstants)
+    try:
+        return eval(inputString,globals(),UsualConstants)
+    except Exception as e:
+        print(e)
+        print("At the moment you have to explicitly multiply with units (they are python constants)")
+        return 0
 
 
 # def inExpr(j,string):
