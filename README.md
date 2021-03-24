@@ -25,7 +25,7 @@ Or `CreateDocument(complicated parameters)` or change the parameters at the top 
 
 ## Versions:
 There is a hosted version:
-https://NaturalUnits.thebytebreaker.repl.run
+https://replit.com/@TheByteBreaker/NaturalUnits-1?embed=1&output=1
 
 Created documents can be downloaded from the links provided there by using `get tex files` or `get pdf`
 
